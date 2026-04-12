@@ -1,21 +1,23 @@
 from __future__ import annotations
 import time
 import matplotlib.pyplot as plt
+from schedulers_simulator.Process import Process
 
-class Process:
-    num : int
-    arrival_time : int
-    burst_time : int
-    isFinished : bool
-    start_time : int
-    finish_time : int
+#RoundRobin Process Swapped for general Process in Integration
+# class Process:
+#     num : int
+#     arrival_time : int
+#     burst_time : int
+#     isFinished : bool
+#     start_time : int
+#     finish_time : int
     
     
-    def __init__(self, num,arrival_time,burst_time) -> None:
-        self.num = num
-        self.arrival_time = arrival_time
-        self.burst_time = burst_time
-        self.isFinished = False
+#     def __init__(self, num,arrival_time,burst_time) -> None:
+#         self.num = num
+#         self.arrival_time = arrival_time
+#         self.burst_time = burst_time
+#         self.isFinished = False
 
 class RoundRobinScheduler:
     quantum : int

@@ -8,10 +8,10 @@ def main():
     for i in range(num_of_processes):
         current_processes.append(Process(
             num= i,
-            arrival_time= 0,
+            arrival_time= int(input(f"Enter Arrival time for P{i}: ")),
             burst_time= int(input(f"Enter Burst time for P{i}: "))
         ))
-    print([(i.num, i.burst_time) for i in current_processes])
+    print([(i.num, i.arrival_time ,i.burst_time) for i in current_processes])
     quantum = 4
     #======================
     

@@ -17,7 +17,10 @@
 # • Average waiting time and average turnaround time
 # • Remaining burst time updated table live
 
-from schedulers_simulator.Process import Process
+from Process import Process
+from gantt_chart import redraw_gantt
+import matplotlib.pyplot as plt
+import time
 
 def push_arrived_process(processes: list[Process], ready_queue: list[Process]):
     i = 0 
@@ -32,9 +35,8 @@ def proceed_time(processes: list[Process]):
     for process in processes:
         process.arrival_time -= 1
 
-def sjf_preemptive(processes: list[Process])->list[list[(int, int, int), int, int, int]]:
+def sjf_preemptive(processes: list[Process], live_sim: bool = False, fig = None, ax = None)->tuple[list, int, float, float]:
     time_counter = 0
-    processes = []
     ready_queue = []
     history = []
     number_of_processes = len(processes)
@@ -82,18 +84,40 @@ def sjf_preemptive(processes: list[Process])->list[list[(int, int, int), int, in
             ready_queue[i].waiting_time += 1
             i+=1
 
-        # Process termination and computing turnaround time and average waiting time
-        if(running_process.burst_time == 0):
-            turn_around_time += time_counter - running_process.original_arrival_time
+
+        if live_sim:
+            time.sleep(1)
+            redraw_gantt(ax, history)
+            fig.canvas.draw()
+            fig.canvas.flush_events()            
+            # print(f"\n{'─' * 40}")
+            # print(f"  ⏱  Time : {time_counter}")
+            # print(f"{'─' * 40}")
+            
+            # # Running process
+            # print(f"  ▶  Running  : P{ready_queue[0].num}  (remaining: {ready_queue[0].burst_time})")
+            
+            # # Queue
+            # queue_str = "  →  ".join(f"P{p.num}({p.burst_time})" for p in ready_queue[1:])
+            # print(f"  ⏳ Waiting  : {queue_str if queue_str else 'empty'}")
+
+
+
+        # Process termination
+        if running_process.burst_time == 0:
+            turn_around_time     += time_counter - running_process.original_arrival_time
             average_waiting_time += running_process.waiting_time
-            print(f"P{running_process.num} finished at {time_counter}")
+            print(f"\n  ✔  P{running_process.num} finished at t={time_counter}")
+            print(f"{'─' * 40}")
             ready_queue.pop(0)
+            if not ready_queue:
+                break
 
         # Moving time by one second
         proceed_time(processes)
 
     turn_around_time = float(turn_around_time/number_of_processes)
     average_waiting_time = float(average_waiting_time/number_of_processes)
-    print(f"Turnaround time = {turn_around_time}")
-    print(f"Average Waiting time = {average_waiting_time}")
-    return [history, time_counter, turn_around_time, average_waiting_time]
+    # print(f"Turnaround time = {turn_around_time}")
+    # print(f"Average Waiting time = {average_waiting_time}")
+    return (history, time_counter, turn_around_time, average_waiting_time)

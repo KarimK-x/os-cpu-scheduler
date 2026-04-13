@@ -1,11 +1,9 @@
 import matplotlib.pyplot as plt
-from schedulers_simulator.Process import Process
+from Process import Process
+from gantt_chart import draw_gantt
+from SJF import sjf_preemptive
 
 processes_list = []
-history = []
-time_counter = 0
-number_of_processes = 0
-selected_algo = None
 
 ## ========================================================================== ##
 ## ============================ Helper Functions ============================ ##
@@ -24,8 +22,13 @@ def get_valid_number(prompt):
         except ValueError:
             print("Error: That is not a valid number. Please try again.")
 
-def get_processes():
-    number_of_processes = get_valid_number("Enter The number of processes : ")
+def get_processes(selected_algo: str):
+    number_of_processes = 0
+    while (not number_of_processes > 0):
+        number_of_processes = get_valid_number("Enter The number of processes : ")
+        if(number_of_processes <= 0):
+            print("Error: please enter a valid number.")
+
     i = 1
     while i <= number_of_processes:
         arrival_time = get_valid_number((f"Enter the arrival time of P{i}: "))
@@ -39,31 +42,62 @@ def get_processes():
         i+=1
 
 def get_the_scheduler_type():
-    pass
+    SCHEDULERS = {
+        "0": "exit the program",
+        "1": "FCFS",
+        "2": "SJF (Non-Preemptive)",
+        "3": "SJF (Preemptive)",
+        "4": "Round Robin",
+        "5": "Priority (Non-Preemptive)",
+        "6": "Priority (Preemptive)",
+    }
 
+    print("Select a Scheduler:")
+    print("─" * 30)
+    for key, name in SCHEDULERS.items():
+        print(f"  [{key}] {name}")
+    print("─" * 30)
 
+    while True:
+        choice = input("Enter your choice: ")
+        if choice == '0':
+            print("Goodbye 😘")
+            exit()
+        elif choice in SCHEDULERS:
+            return SCHEDULERS[choice]
+        print("  Invalid choice. Enter a number from 1 to 6.")
+
+SCHEDULER_FUNCTIONS = {
+    "FCFS":                      None,
+    "SJF (Non-Preemptive)":      None,
+    "SJF (Preemptive)":     sjf_preemptive,
+    "Round Robin":               None,
+    "Priority (Non-Preemptive)": None,
+    "Priority (Preemptive)":     None,
+}
 
 
 ## ===================================================================== ##
-## ============================ Gantt Chart ============================ ##
+## ================================ Main ================================ ##
 ## ===================================================================== ##
-fig, ax = plt.subplots(figsize=(12, 3))
-colors = plt.cm.tab10.colors
 
-for (pnum, start, end) in history:
-    ax.barh(0, end - start, left=start, height=0.5,
-            color=colors[(pnum - 1) % len(colors)],
-            edgecolor="black")
-    ax.text((start + end) / 2, 0, f"P{pnum}",
-            ha="center", va="center", fontsize=9,
-            fontweight="bold", color="white")
+def main():    
+    while True:
+        selected_algo = get_the_scheduler_type()
+        get_processes(selected_algo)
 
-boundaries = sorted(set(t for _, s, e in history for t in (s, e)))
-ax.set_xticks(boundaries)
-ax.set_yticks([])
-ax.set_xlabel("Time")
-ax.set_title("Gantt Chart — SJF Preemptive")
-ax.set_xlim(0, time_counter)
-plt.tight_layout()
-plt.savefig("gantt.png", dpi=150)
-plt.show()
+        plt.ion() 
+        fig, ax = plt.subplots(figsize=(12, 3))
+
+        run_fn = SCHEDULER_FUNCTIONS[selected_algo]
+        history, time_counter, turn_around_time, average_waiting_time = run_fn(processes_list, True, fig, ax)
+
+        print(f"\nAverage Turnaround Time : {turn_around_time:.2f} sec")
+        print(f"Average Waiting Time    : {average_waiting_time:.2f} sec\n")
+
+        plt.ioff()
+        draw_gantt(ax, history, time_counter)
+        plt.show()
+
+if __name__ == "__main__":
+    main()

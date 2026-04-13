@@ -44,7 +44,7 @@ def get_processes(selected_algo: str):
         
 def do_algo_specific_preprocessing(selected_algo : str) -> None:
     if selected_algo in "Round Robin":
-        quantum = get_valid_number("Enter quantum time for round robin. Default is 4.")
+        quantum = get_valid_number("Enter quantum time for round robin. Default is 4: ")
         SCHEDULER_FUNCTIONS[selected_algo] = RoundRobinScheduler(quantum).runRoundRobin
 
 def get_the_scheduler_type():
@@ -96,6 +96,7 @@ def main():
 
         plt.ion() 
         fig, ax = plt.subplots(figsize=(12, 3))
+        plt.show(block=False)
 
         run_fn = SCHEDULER_FUNCTIONS[selected_algo]
         history, time_counter, turn_around_time, average_waiting_time = run_fn(processes_list, True, fig, ax)
@@ -104,7 +105,9 @@ def main():
         print(f"Average Waiting Time    : {average_waiting_time:.2f} sec\n")
 
         plt.ioff()
-        draw_gantt(ax, history, time_counter)
+        plt.close(fig)
+        final_fig, final_ax = plt.subplots(figsize=(12, 3))
+        draw_gantt(final_ax, history, time_counter)
         plt.show()
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ import time
 import matplotlib.pyplot as plt
 from collections import defaultdict
 from Process import Process
+from gantt_chart import redraw_gantt
 
 class RoundRobinScheduler:
     quantum : int
@@ -15,6 +16,14 @@ class RoundRobinScheduler:
         quantum (int) : Time spent on each process before switching to next. Default = 4s.
         """
         self.quantum = quantum
+
+    def _live_redraw(self, ax, history: list[tuple[int, int, int]]) -> None:
+        """Redraw and pump GUI events so the window remains responsive."""
+        redraw_gantt(ax, history)
+        fig = ax.figure
+        fig.canvas.draw_idle()
+        fig.canvas.flush_events()
+        plt.pause(0.001)
         
     def runRoundRobin(self, current_processes : list[Process],
                       live_sim: bool = False, fig = None, ax = None) -> tuple[list, int, float, float]:
@@ -29,8 +38,11 @@ class RoundRobinScheduler:
             A table of processes and their CPU Burst times.
         """
         self.process_time_ranges = []
+        self.current_time = 0
         self.processes = current_processes.copy()
-        self.drawGant(self.process_time_ranges, live=True)
+        if live_sim:
+            self._live_redraw(ax, self.process_time_ranges)
+            # self.drawGant(self.process_time_ranges, live=True)
         unarrived_processes : list[Process] = []
         
         # To Loop Back Again
@@ -59,15 +71,23 @@ class RoundRobinScheduler:
                     print("CURRENT PROCESS EXECUTING IS", process.num, "BURST TIME REMAINING:", process.burst_time)
                     for t in range(self.quantum):
                         self.current_time += 1
-                        time.sleep(1)
+                        if live_sim:
+                            plt.pause(1)
+                        else:
+                            time.sleep(1)
                         process.burst_time = process.burst_time - 1
                         print(f"Executing process {process.num} for {t+1} seconds. Remaining burst time: {process.burst_time}")
                         
-                        self.drawGant(
-                            self.process_time_ranges,
-                            live=True,
-                            active_segment=(process.num, process.start_time, self.current_time),
-                        )
+                        if live_sim:
+                            active_history = self.process_time_ranges.copy()
+                            if self.current_time > process.start_time:
+                                active_history.append((process.num, process.start_time, self.current_time))
+                            self._live_redraw(ax, active_history)
+                            # self.drawGant(
+                            #     self.process_time_ranges,
+                            #     live=True,
+                            #     active_segment=(process.num, process.start_time, self.current_time),
+                            # )
 
                         # Process ends before quantum is done
                         if process.burst_time <= 0: 
@@ -79,7 +99,9 @@ class RoundRobinScheduler:
                             
                             current_processes.remove(process)
                             process_removed_flag = True
-                            self.drawGant(self.process_time_ranges, live=True)
+                            if live_sim:
+                                self._live_redraw(ax, self.process_time_ranges)
+                                # self.drawGant(self.process_time_ranges, live=True)
                             break
                         
                     # Do not increment i if a process is removed. As processes shifts down.    
@@ -87,12 +109,18 @@ class RoundRobinScheduler:
                         i+=1        
                         process.finish_time = self.current_time
                         self.process_time_ranges.append((process.num, process.start_time, process.finish_time))
-                        self.drawGant(self.process_time_ranges, live=True)
+                        if live_sim:
+                            self._live_redraw(ax, self.process_time_ranges)
+                            # self.drawGant(self.process_time_ranges, live=True)
             else:
-                time.sleep(1)
+                if live_sim:
+                    plt.pause(1)
+                else:
+                    time.sleep(1)
                 self.current_time += 1    
-                
-        self.drawGant(self.process_time_ranges, live=True, finalize=True)
+        if live_sim:    
+            self._live_redraw(ax, self.process_time_ranges)
+            # self.drawGant(self.process_time_ranges, live=True, finalize=True)
         
         return (self.process_time_ranges,
                 self.current_time,

@@ -1,7 +1,12 @@
 from __future__ import annotations
 import time
 import matplotlib.pyplot as plt
+import sys
+from pathlib import Path
+current_dir = Path(__file__).parent.resolve()
+sys.path.append(str(current_dir.parent))
 from schedulers_simulator.Process import Process
+
 
 #RoundRobin Process Swapped for general Process in Integration
 # class Process:
@@ -22,7 +27,8 @@ from schedulers_simulator.Process import Process
 class RoundRobinScheduler:
     quantum : int
     current_time : int = 0
-    process_time_ranges : list[list[tuple[int,int]]]
+    process_time_ranges : list[tuple[int,int,int]]
+    processes : list[Process]
         
     def __init__(self, quantum = 4) -> None:
         """
@@ -30,7 +36,7 @@ class RoundRobinScheduler:
         """
         self.quantum = quantum
         
-    def runRoundRobin(self, current_processes : list[Process]) -> list[list[tuple[int,int]]]:
+    def runRoundRobin(self, current_processes : list[Process]) -> list[tuple[int,int,int]]:
         """
         Args:
             processes (list[Process]):  A list of Process objects
@@ -41,51 +47,69 @@ class RoundRobinScheduler:
         Returns:
             A table of processes and their CPU Burst times.
         """
-        self.process_time_ranges = [[] for _ in range(len(current_processes))]
+        self.process_time_ranges = []
+        self.processes = current_processes
         self.drawGant(self.process_time_ranges, live=True)
+        unarrived_processes : list[Process] = []
         
         # To Loop Back Again
-        while(current_processes):
-            print(f"============\nROUND ROBIN: Current Processes: {[process.num for process in current_processes]}")
-            i=0
-            while i < len(current_processes):
-                process_removed_flag = False
-                process = current_processes[i]
-                process.start_time = self.current_time
+        while(current_processes or unarrived_processes):
             
-                
-                print("CURRENT PROCESS EXECUTING IS", process.num, "BURST TIME REMAINING:", process.burst_time)
-                for t in range(self.quantum):
-                    self.current_time += 1
-                    time.sleep(1)
-                    process.burst_time = process.burst_time - 1
-                    print(f"Executing process {process.num} for {t+1} seconds. Remaining burst time: {process.burst_time}")
-                    
-                    self.drawGant(
-                        self.process_time_ranges,
-                        live=True,
-                        active_segment=(process.num, process.start_time, self.current_time),
-                    )
-
-                    # Process ends before quantum is done
-                    if process.burst_time <= 0: 
-                        process.isFinished = True
-                        print(f"PROCESS {process.num} IS FINISHED AND REMOVED")
-                        
-                        process.finish_time = self.current_time
-                        self.process_time_ranges[process.num].append((process.start_time, process.finish_time))
-                        
+            for process in current_processes.copy():
+                if process.arrival_time > self.current_time:
+                    if current_processes:
                         current_processes.remove(process)
-                        process_removed_flag = True
-                        self.drawGant(self.process_time_ranges, live=True)
-                        break
+                    unarrived_processes.insert(0, process)
                     
-                # Do not increment i if a process is removed. As processes shifts down.    
-                if not process_removed_flag:
-                    i+=1        
-                    process.finish_time = self.current_time
-                    self.process_time_ranges[process.num].append((process.start_time, process.finish_time))
-                    self.drawGant(self.process_time_ranges, live=True)
+            for process in unarrived_processes.copy():
+                if process.arrival_time <= self.current_time:
+                    if unarrived_processes:
+                        unarrived_processes.remove(process)
+                    current_processes.insert(0, process)
+                        
+            print(f"============\nROUND ROBIN: Current Processes: {[process.num for process in current_processes]}")
+            if current_processes:
+                i=0
+                while i < len(current_processes):
+                    process_removed_flag = False
+                    process = current_processes[i]
+                    process.start_time = self.current_time
+                    
+                    print("CURRENT PROCESS EXECUTING IS", process.num, "BURST TIME REMAINING:", process.burst_time)
+                    for t in range(self.quantum):
+                        self.current_time += 1
+                        time.sleep(1)
+                        process.burst_time = process.burst_time - 1
+                        print(f"Executing process {process.num} for {t+1} seconds. Remaining burst time: {process.burst_time}")
+                        
+                        self.drawGant(
+                            self.process_time_ranges,
+                            live=True,
+                            active_segment=(process.num, process.start_time, self.current_time),
+                        )
+
+                        # Process ends before quantum is done
+                        if process.burst_time <= 0: 
+                            process.isFinished = True
+                            print(f"PROCESS {process.num} IS FINISHED AND REMOVED")
+                            
+                            process.finish_time = self.current_time
+                            self.process_time_ranges.append((process.num,process.start_time, process.finish_time))
+                            
+                            current_processes.remove(process)
+                            process_removed_flag = True
+                            self.drawGant(self.process_time_ranges, live=True)
+                            break
+                        
+                    # Do not increment i if a process is removed. As processes shifts down.    
+                    if not process_removed_flag:
+                        i+=1        
+                        process.finish_time = self.current_time
+                        self.process_time_ranges.append((process.num, process.start_time, process.finish_time))
+                        self.drawGant(self.process_time_ranges, live=True)
+            else:
+                time.sleep(1)
+                self.current_time += 1    
                 
         self.drawGant(self.process_time_ranges, live=True, finalize=True)
         return self.process_time_ranges
@@ -115,15 +139,12 @@ class RoundRobinScheduler:
             
     def drawGant(
         self,
-        process_time_ranges: list[list[tuple[int, int]]],
+        process_time_ranges: list[tuple[int,int, int]],
         live: bool = False,
         active_segment: tuple[int, int, int] | None = None,
         finalize: bool = False,
     ) -> None:
-        history: list[tuple[int, int, int]] = []
-        for process_num, ranges in enumerate(process_time_ranges):
-            for start, end in ranges:
-                history.append((process_num, start, end))
+        history: list[tuple[int, int, int]] = process_time_ranges
 
         # Draw the currently running slice before it is committed to history.
         if active_segment is not None:

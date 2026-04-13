@@ -17,7 +17,7 @@
 # • Average waiting time and average turnaround time
 # • Remaining burst time updated table live
 
-from Process import Process
+from schedulers_simulator.Process import Process
 
 def push_arrived_process(processes: list[Process], ready_queue: list[Process]):
     i = 0 

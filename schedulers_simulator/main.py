@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from Process import Process
+from schedulers_simulator.Process import Process
 
 processes_list = []
 history = []

@@ -3,26 +3,10 @@ import time
 import matplotlib.pyplot as plt
 import sys
 from pathlib import Path
+from collections import defaultdict
 current_dir = Path(__file__).parent.resolve()
 sys.path.append(str(current_dir.parent))
 from schedulers_simulator.Process import Process
-
-
-#RoundRobin Process Swapped for general Process in Integration
-# class Process:
-#     num : int
-#     arrival_time : int
-#     burst_time : int
-#     isFinished : bool
-#     start_time : int
-#     finish_time : int
-    
-    
-#     def __init__(self, num,arrival_time,burst_time) -> None:
-#         self.num = num
-#         self.arrival_time = arrival_time
-#         self.burst_time = burst_time
-#         self.isFinished = False
 
 class RoundRobinScheduler:
     quantum : int
@@ -48,7 +32,7 @@ class RoundRobinScheduler:
             A table of processes and their CPU Burst times.
         """
         self.process_time_ranges = []
-        self.processes = current_processes
+        self.processes = current_processes.copy()
         self.drawGant(self.process_time_ranges, live=True)
         unarrived_processes : list[Process] = []
         
@@ -114,27 +98,56 @@ class RoundRobinScheduler:
         self.drawGant(self.process_time_ranges, live=True, finalize=True)
         return self.process_time_ranges
     
-    def calculateAverageWaitingTime(self, process_time_ranges):
-        avg_waiting_time = 0
-        for process in process_time_ranges:
-            process_wait_time = process[0][0]
-            for i in range(len(process)-1):
-                process_wait_time += process[i+1][0] - process[i][1]
-            avg_waiting_time += process_wait_time
+
+    def calculateAverageWaitingTime(self, process_time_ranges: list[tuple[int, int, int]]) -> float:
+        # Group segments by process number
+        segments_by_process: dict[int, list[tuple[int, int]]] = defaultdict(list)
+        print("PROCESS TIME RANGES ARE", process_time_ranges)
+        for process_num, start, end in process_time_ranges:
+            segments_by_process[process_num].append((start, end))
+
+        arrival_times = {p.num: p.arrival_time for p in self.processes}
+
+        total_waiting = 0.0
+        for process_num, segments in segments_by_process.items():
+            segments.sort(key=lambda s: s[0])  # sort by start time
+
+            arrival = arrival_times[process_num]
+
+            # Wait before first execution
+            waiting = segments[0][0] - arrival
+            print("Initial waiting is ", waiting, "for process ", process_num)
             
-        avg_waiting_time /= len(process_time_ranges)
-        
-        return avg_waiting_time
-    
-    def calculateAverageTurnAroundTime(self, process_time_ranges):
-        avg_turnaround_time = 0
-        for process in process_time_ranges:
-            process_turnaround_time = process[-1][1] - 0
-            avg_turnaround_time += process_turnaround_time
-            
-        avg_turnaround_time /= len(process_time_ranges)
-        
-        return avg_turnaround_time
+            print("SEGMENTS BY PROCESS ARE ", segments_by_process)
+
+            # Gaps between consecutive segments (preemption gaps)
+            for i in range(1, len(segments)):
+                waiting += segments[i][0] - segments[i - 1][1]
+                print("waiting increased by ", segments[i][0], "and decreased by", segments[i-1][1])
+
+            total_waiting += waiting
+
+        return total_waiting / len(segments_by_process)
+
+
+    def calculateAverageTurnAroundTime(self, process_time_ranges: list[tuple[int, int, int]]) -> float:
+        # Group segments by process number
+        segments_by_process: dict[int, list[tuple[int, int]]] = defaultdict(list)
+        for process_num, start, end in process_time_ranges:
+            segments_by_process[process_num].append((start, end))
+
+        arrival_times = {p.num: p.arrival_time for p in self.processes}
+
+        total_turnaround = 0.0
+        for process_num, segments in segments_by_process.items():
+            segments.sort(key=lambda s: s[0])
+
+            last_end = segments[-1][1]
+            arrival = arrival_times[process_num]
+
+            total_turnaround += last_end - arrival
+
+        return total_turnaround / len(segments_by_process)
             
             
     def drawGant(
@@ -144,7 +157,7 @@ class RoundRobinScheduler:
         active_segment: tuple[int, int, int] | None = None,
         finalize: bool = False,
     ) -> None:
-        history: list[tuple[int, int, int]] = process_time_ranges
+        history: list[tuple[int, int, int]] = process_time_ranges.copy()
 
         # Draw the currently running slice before it is committed to history.
         if active_segment is not None:

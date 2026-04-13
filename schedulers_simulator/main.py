@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from Process import Process
 from gantt_chart import draw_gantt
 from SJF import sjf_preemptive
+from round_robin import RoundRobinScheduler
 
 processes_list = []
 
@@ -40,6 +41,11 @@ def get_processes(selected_algo: str):
             
         processes_list.append(Process(i, arrival_time, burst_time, priority))
         i+=1
+        
+def do_algo_specific_preprocessing(selected_algo : str) -> None:
+    if selected_algo in "Round Robin":
+        quantum = get_valid_number("Enter quantum time for round robin. Default is 4.")
+        SCHEDULER_FUNCTIONS[selected_algo] = RoundRobinScheduler(quantum).runRoundRobin
 
 def get_the_scheduler_type():
     SCHEDULERS = {
@@ -71,7 +77,7 @@ SCHEDULER_FUNCTIONS = {
     "FCFS":                      None,
     "SJF (Non-Preemptive)":      None,
     "SJF (Preemptive)":     sjf_preemptive,
-    "Round Robin":               None,
+    "Round Robin":               RoundRobinScheduler().runRoundRobin,
     "Priority (Non-Preemptive)": None,
     "Priority (Preemptive)":     None,
 }
@@ -85,6 +91,8 @@ def main():
     while True:
         selected_algo = get_the_scheduler_type()
         get_processes(selected_algo)
+        
+        do_algo_specific_preprocessing(selected_algo)
 
         plt.ion() 
         fig, ax = plt.subplots(figsize=(12, 3))

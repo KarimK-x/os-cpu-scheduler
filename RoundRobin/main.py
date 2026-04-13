@@ -1,4 +1,4 @@
-from round_robin import Process, RoundRobinScheduler
+from schedulers_simulator.RoundRobin.round_robin import Process, RoundRobinScheduler
 
 def main():
     # Replace by user input

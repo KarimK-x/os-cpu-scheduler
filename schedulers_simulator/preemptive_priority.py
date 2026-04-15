@@ -120,17 +120,3 @@ def preemptive_priority_scheduler(process_list: list[Process], new_process_queue
     average_turnaround_time=float(total_turnaround_time/no)
     average_waiting_time=float(total_waiting_time/no)
     return (history, current_time,average_turnaround_time, average_waiting_time)
-
-
-
-
-
-
-
-
-
-
-
-
-
-        

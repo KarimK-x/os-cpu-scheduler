@@ -6,8 +6,7 @@ from round_robin import RoundRobinScheduler
 from preemptive_priority import preemptive_priority_scheduler
 import threading
 from queue import Queue
-import sys
-import select
+from SJF_NF import sjf
 
 ## ========================================================================== ##
 ## ============================ Helper Functions ============================ ##
@@ -78,7 +77,7 @@ def get_the_scheduler_type():
 
 SCHEDULER_FUNCTIONS = {
     "FCFS":                      None,
-    "SJF (Non-Preemptive)":      None,
+    "SJF (Non-Preemptive)":      sjf,
     "SJF (Preemptive)":          sjf_preemptive,
     "Round Robin":               RoundRobinScheduler().runRoundRobin,
     "Priority (Non-Preemptive)": None,

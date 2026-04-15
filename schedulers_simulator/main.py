@@ -46,8 +46,8 @@ def get_processes(selected_algo: str, processes_list: list[Process]):
         i+=1
         
 def do_algo_specific_preprocessing(selected_algo : str) -> None:
-    if selected_algo  == "Round Robin":
-        quantum = get_valid_number("Enter quantum time for round robin. Default is 4.")
+    if selected_algo in "Round Robin":
+        quantum = get_valid_number("Enter quantum time for round robin. Default is 4: ")
         SCHEDULER_FUNCTIONS[selected_algo] = RoundRobinScheduler(quantum).runRoundRobin
 
 def get_the_scheduler_type():
@@ -163,6 +163,7 @@ def main():
 
         plt.ion()
         fig, ax = plt.subplots(figsize=(12, 3))
+        plt.show(block=False)
 
         run_fn = SCHEDULER_FUNCTIONS[selected_algo]
         history, time_counter, att, awt = run_fn(
@@ -186,7 +187,9 @@ def main():
         print(f"Close the chart window to continue.")
 
         plt.ioff()
-        draw_gantt(ax, history, time_counter)
+        plt.close(fig)
+        final_fig, final_ax = plt.subplots(figsize=(12, 3))
+        draw_gantt(final_ax, history, time_counter)
         plt.show()
 
 if __name__ == "__main__":

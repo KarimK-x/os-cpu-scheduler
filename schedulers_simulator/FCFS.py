@@ -8,7 +8,6 @@ class FCFS:
     def run(self):
         current_time = 0
         for p in self.processes:
-            # handle CPU idle time
             if(current_time<p.arrival_time):
                 self.gantt_chart.append(("IDLE", current_time, p.arrival_time))
                 current_time = p.arrival_time
@@ -47,7 +46,6 @@ if __name__ == "__main__":
     for p in finished_procs:
         print(f"{p.num}   | {p.start_time:<5} | {p.finish_time:<3} | {p.turnaround_time:<3} | {p.waiting_time}")
 
-    # 4. Check Averages
     avg_tat, avg_wt = scheduler.calculateAverageTime()
     print(f"\nAverage TAT: {avg_tat:.2f}")
     print(f"Average WT: {avg_wt:.2f}")

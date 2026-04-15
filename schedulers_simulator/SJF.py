@@ -41,7 +41,7 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
     time_counter = 0
     ready_queue = []
     history = []
-    processes = copy.deepcopy(processes)   # ← work on a copy, original untouched
+    processes = copy.deepcopy(processes)   
     number_of_processes = len(processes)
 
     # Sorting the processes according to their arrival time 
@@ -55,28 +55,29 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
         # Checking for pause
         if(live_sim):
             if pause_event:
-                pause_event.wait()
+                pause_event.wait()  
 
             if new_process_queue:
                 while not new_process_queue.empty():
                     new_p = new_process_queue.get()
+                    new_p.original_arrival_time = new_p.arrival_time + time_counter 
                     processes.append(new_p)
-                    number_of_processes += 1 # [BUG FIX] Update the total process count for accurate averages!
+                    number_of_processes += 1 
                     print(f"\n [+] P{new_p.num} joined the simulation!")
 
         # Checking for arrived processes
         push_arrived_process(processes, ready_queue)
+
+        # Sorting the ready_queue according least remaining burst time
+        ready_queue = sorted(ready_queue, key=lambda x: (x.burst_time, x.num)) # type: ignore
 
         # Skip idle cases
         if not ready_queue:
             time_counter += 1
             proceed_time(processes)
             if live_sim:
-                time.sleep(1) # [BUG FIX] Sleep during idle time so the live sim doesn't skip ahead instantly
+                time.sleep(1) 
             continue
-
-        # Sorting the ready_queue according least remaining burst time
-        ready_queue = sorted(ready_queue, key=lambda x: (x.burst_time, x.num)) # type: ignore
 
         # Running a process for 1 sec
         running_process = ready_queue[0]
@@ -89,11 +90,11 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
         else:
             history.append((running_process.num, time_counter - 1, time_counter))
 
-        # Computing waiting time for every process
-        i = 1
-        while i < len(ready_queue):
-            ready_queue[i].waiting_time += 1
-            i+=1
+        # # Computing waiting time for every process
+        # i = 1
+        # while i < len(ready_queue):
+        #     ready_queue[i].waiting_time += 1
+        #     i+=1
 
         if live_sim:
             # [FIX] Print the UI FIRST so the pause menu doesn't get buried underneath it
@@ -118,7 +119,7 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
         # Process termination
         if running_process.burst_time == 0:
             turn_around_time     += time_counter - running_process.original_arrival_time
-            average_waiting_time += running_process.waiting_time
+            average_waiting_time += time_counter - running_process.original_arrival_time - running_process.original_burst_time
             print(f"\n  ✔  P{running_process.num} finished at t={time_counter}")
             print(f"{'─' * 40}")
             ready_queue.pop(0)
@@ -128,7 +129,7 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
 
     
     if number_of_processes > 0:
-        turn_around_time = float(turn_around_time/number_of_processes)
+        turn_around_time     = float(turn_around_time/number_of_processes)
         average_waiting_time = float(average_waiting_time/number_of_processes)
     else:
         turn_around_time = 0.0

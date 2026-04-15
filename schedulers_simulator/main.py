@@ -97,12 +97,9 @@ def pause_event_handler(selected_algo: str, processes_list: list[Process], new_p
             print("\n Simulation is paused")
             print(" [A] : add a new process")
             print(" [R] : Resume the simulation")
-            #i = 0
             while True:
                 choice = input(" Choice : ").strip().upper()
                 if(choice == "A"):
-                    # num = len(processes_list) + i + 1
-                    # i+=1
                     current_id+=1
                     num=current_id
 
@@ -129,11 +126,12 @@ def pause_event_handler(selected_algo: str, processes_list: list[Process], new_p
             print("\n Resumed")
 
 ## ===================================================================== ##
-## ================================ Main ================================ ##
+## ================================ Main =============================== ##
 ## ===================================================================== ##
 
 def main():
     while True:
+        live_sim          = False
         processes_list    = []        
         new_process_queue = Queue()   
         pause_event       = threading.Event()
@@ -143,6 +141,17 @@ def main():
         selected_algo       = get_the_scheduler_type()
         get_processes(selected_algo, processes_list)
         do_algo_specific_preprocessing(selected_algo)
+        print("Do you want the simulation to be live? [Y]:yes / [N]:no ")
+        while True:
+            live_choice = input().strip().upper()
+            if(live_choice == "Y"):
+                live_sim = True
+                break
+            elif(live_choice == "N"):
+                live_sim = False
+                break
+            else:
+                print("Please enter a valid option [Y] or [N]")
 
         listener = threading.Thread(
             target = pause_event_handler,
@@ -156,10 +165,10 @@ def main():
         fig, ax = plt.subplots(figsize=(12, 3))
 
         run_fn = SCHEDULER_FUNCTIONS[selected_algo]
-        history, time_counter, awt, att = run_fn(
+        history, time_counter, att, awt = run_fn(
             processes_list,
             new_process_queue,
-            live_sim    = True,
+            live_sim    = live_sim,
             pause_event = pause_event,
             fig         = fig,
             ax          = ax
@@ -168,9 +177,9 @@ def main():
         stop_event.set()
 
         #need to release the input lock
-        print("\n [Simulation Complete] Press 'Enter' to view the final chart...")
+        # print("\n [Simulation Complete] Press 'Enter' to view the final chart...")
 
-        listener.join()
+        # listener.join()
 
         print(f"\nAverage Turnaround Time : {att:.2f} sec")
         print(f"Average Waiting Time    : {awt:.2f} sec\n")

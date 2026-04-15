@@ -1,34 +1,16 @@
-# Inputs :
-# Type of scheduler + no of Processes ready to run currently + required information about each process according to the scheduler type.
-# A new process can be added dynamically while the scheduler is running.
-
-# Note : Don't ask the user for unused info
-# Example: If the user chose FCFS scheduler no need to ask him what is the priority numbers.
-
-# Operation:
-# • A live scheduler is run with each 1 unit of time mapped to 1 second
-# • Remaining burst time table is updated as time progresses.
-# • An option to run the currently existing processes only without live scheduling must be available.
-# • Your project must be built, and you must generate a ready to run executable file
-# • You must deliver a GUI desktop application.
-
-# Outputs:
-# • Timeline showing the order and time taken by each process (Gantt Chart) drawn live.
-# • Average waiting time and average turnaround time
-# • Remaining burst time updated table live
-
 from Process import Process
 from gantt_chart import redraw_gantt
 import matplotlib.pyplot as plt
 import time
 import copy 
+import bisect
 from queue import Queue
 
 def push_arrived_process(processes: list[Process], ready_queue: list[Process]):
     i = 0 
     while i < len(processes):
         if(processes[i].arrival_time == 0):
-            ready_queue.append(processes[i])
+            bisect.insort(ready_queue, processes[i], key=lambda x: (x.burst_time, x.num))
             processes.pop(i)
             continue
         i+=1
@@ -68,9 +50,6 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
         # Checking for arrived processes
         push_arrived_process(processes, ready_queue)
 
-        # Sorting the ready_queue according least remaining burst time
-        ready_queue = sorted(ready_queue, key=lambda x: (x.burst_time, x.num)) # type: ignore
-
         # Skip idle cases
         if not ready_queue:
             time_counter += 1
@@ -90,14 +69,7 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
         else:
             history.append((running_process.num, time_counter - 1, time_counter))
 
-        # # Computing waiting time for every process
-        # i = 1
-        # while i < len(ready_queue):
-        #     ready_queue[i].waiting_time += 1
-        #     i+=1
-
         if live_sim:
-            # [FIX] Print the UI FIRST so the pause menu doesn't get buried underneath it
             print(f"\n{'─' * 40}")
             print(f"  ⏱  Time : {time_counter}")
             print(f"{'─' * 40}")

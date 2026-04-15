@@ -176,11 +176,6 @@ def main():
 
         stop_event.set()
 
-        #need to release the input lock
-        # print("\n [Simulation Complete] Press 'Enter' to view the final chart...")
-
-        # listener.join()
-
         print(f"\nAverage Turnaround Time : {att:.2f} sec")
         print(f"Average Waiting Time    : {awt:.2f} sec\n")
         print(f"Close the chart window to continue.")

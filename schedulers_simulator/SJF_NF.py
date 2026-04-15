@@ -17,7 +17,7 @@ def sjf(processes: list[Process], new_process_queue = None, live_sim: bool = Fal
     t = 0
     processes = sorted(processes, key=lambda x: (x.arrival_time, x.num))
 
-    while readyqueue or processes:
+    while readyqueue or processes_curr:
 
         for p in processes:
             if p.arrival_time <= t and p.isFinished==False:

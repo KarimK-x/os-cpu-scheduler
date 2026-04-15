@@ -22,10 +22,15 @@ def draw_gantt(ax, history, time_counter, title="Gantt Chart"):
 def _draw_bars(ax, history):
     """Shared drawing logic — not called directly."""
     for (pnum, start, end) in history:
-        color = COLORS[(pnum - 1) % len(COLORS)]
+        if(pnum == 0):
+            color = 'gray'
+            label = "IDLE"
+        else:
+            color = COLORS[(pnum - 1) % len(COLORS)]
+            label = f"P{pnum}"
         ax.barh(0, end - start, left=start, height=0.5,
                 color=color, edgecolor="white", linewidth=1.5)
-        ax.text((start + end) / 2, 0, f"P{pnum}",
+        ax.text((start + end) / 2, 0, label,
                 ha="center", va="center",
                 fontsize=10, fontweight="bold", color="white")
     boundaries = sorted(set(t for _, s, e in history for t in (s, e)))

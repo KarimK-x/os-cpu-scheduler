@@ -3,6 +3,7 @@ from Process import Process
 from gantt_chart import draw_gantt
 from SJF import sjf_preemptive
 from round_robin import RoundRobinScheduler
+import FCFS
 
 processes_list = []
 
@@ -74,9 +75,9 @@ def get_the_scheduler_type():
         print("  Invalid choice. Enter a number from 1 to 6.")
 
 SCHEDULER_FUNCTIONS = {
-    "FCFS":                      None,
+    "FCFS":                      FCFS.FCFS().run,
     "SJF (Non-Preemptive)":      None,
-    "SJF (Preemptive)":     sjf_preemptive,
+    "SJF (Preemptive)":          sjf_preemptive,
     "Round Robin":               RoundRobinScheduler().runRoundRobin,
     "Priority (Non-Preemptive)": None,
     "Priority (Preemptive)":     None,

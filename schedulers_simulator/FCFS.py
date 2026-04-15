@@ -10,24 +10,10 @@ class FCFS:
         self.processes = sorted(processes, key=lambda p: p.arrival_time)
         self.gantt_chart = []
         current_time = 0
-<<<<<<< HEAD
-        for p in self.processes:
-            if(current_time<p.arrival_time):
-                self.gantt_chart.append(("IDLE", current_time, p.arrival_time))
-                current_time = p.arrival_time
-            p.start_time = current_time
-            current_time = current_time + p.burst_time
-            p.finish_time = current_time
-            p.isFinished = True
-            p.turnaround_time = p.finish_time - p.arrival_time
-            p.waiting_time = p.turnaround_time - p.burst_time
-            self.gantt_chart.append((p.num, p.start_time, p.finish_time))
-=======
->>>>>>> 014faed (FCFS live-sim)
 
-        if (live_sim):
+        if live_sim:
             for p in self.processes:
-                if(current_time < p.arrival_time):
+                if current_time < p.arrival_time:
                     idle_start = current_time
                     self.gantt_chart.append([0, idle_start, idle_start + 1])
                     while current_time < p.arrival_time:
@@ -58,7 +44,7 @@ class FCFS:
 
         else:
             for p in self.processes:
-                if(current_time < p.arrival_time):
+                if current_time < p.arrival_time:
                     self.gantt_chart.append([0, current_time, p.arrival_time])
                     current_time = p.arrival_time
                 p.start_time = current_time
@@ -92,18 +78,7 @@ if __name__ == "__main__":
     scheduler = FCFS()
     gantt, current_time, avg_tat, avg_wt = scheduler.run(test_processes)
 
-<<<<<<< HEAD
-    print("PID | Start | End | TAT | WT")
-    print("-" * 30)
-    for p in finished_procs:
-        print(f"{p.num}   | {p.start_time:<5} | {p.finish_time:<3} | {p.turnaround_time:<3} | {p.waiting_time}")
-
-    avg_tat, avg_wt = scheduler.calculateAverageTime()
-    print(f"\nAverage TAT: {avg_tat:.2f}")
-    print(f"Average WT: {avg_wt:.2f}")
-    print(f"Gantt Chart: {gantt}")
-=======
     print(f"\nGantt Chart: {gantt}")
     print(f"Average TAT: {avg_tat:.2f}")
     print(f"Average WT: {avg_wt:.2f}")
->>>>>>> 014faed (FCFS live-sim)
+

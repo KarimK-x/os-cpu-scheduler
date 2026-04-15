@@ -3,6 +3,7 @@ from Process import Process
 from gantt_chart import draw_gantt
 from SJF import sjf_preemptive
 from round_robin import RoundRobinScheduler
+from preemptive_priority import preemptive_priority_scheduler
 import threading
 from queue import Queue
 import sys
@@ -81,11 +82,12 @@ SCHEDULER_FUNCTIONS = {
     "SJF (Preemptive)":          sjf_preemptive,
     "Round Robin":               RoundRobinScheduler().runRoundRobin,
     "Priority (Non-Preemptive)": None,
-    "Priority (Preemptive)":     None,
+    "Priority (Preemptive)":     preemptive_priority_scheduler,
 }
 
 
 def pause_event_handler(selected_algo: str, processes_list: list[Process], new_process_queue, pause_event, stop_event):
+    current_id=len(processes_list)
     while not stop_event.is_set():
         
         input()
@@ -95,12 +97,14 @@ def pause_event_handler(selected_algo: str, processes_list: list[Process], new_p
             print("\n Simulation is paused")
             print(" [A] : add a new process")
             print(" [R] : Resume the simulation")
-            i = 0
+            #i = 0
             while True:
                 choice = input(" Choice : ").strip().upper()
                 if(choice == "A"):
-                    num = len(processes_list) + i + 1
-                    i+=1
+                    # num = len(processes_list) + i + 1
+                    # i+=1
+                    current_id+=1
+                    num=current_id
 
                     print("please note the arrival time will be considered from this second")
                     arrival_time = get_valid_number((f"Enter the arrival time: "))
@@ -110,7 +114,7 @@ def pause_event_handler(selected_algo: str, processes_list: list[Process], new_p
                     if "Priority" in selected_algo:
                         priority = get_valid_number("Priority Level : ")
                     
-                    new_p = Process(num, 0, burst_time, priority)
+                    new_p = Process(num, arrival_time, burst_time, priority)
                     new_process_queue.put(new_p)
                     print(f" p{new_p.num} is added successfully.")
                 elif(choice == "R"):

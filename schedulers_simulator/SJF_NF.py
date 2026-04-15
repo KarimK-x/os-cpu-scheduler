@@ -41,15 +41,11 @@ def sjf(processes: list[Process], live_sim: bool = False, fig = None, ax = None)
                 p.isFinished = True
                 processes_curr-=1
 
-
-
         if not readyqueue:
             t+=1
             if live_sim:
                 time.sleep(1)
             continue
-
-
 
         readyqueue = sorted(readyqueue, key=lambda x: (x.burst_time,x.num))
 

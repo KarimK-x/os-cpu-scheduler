@@ -72,10 +72,3 @@ def sjf(processes: list[Process], live_sim: bool = False, fig = None, ax = None)
     waiting_time = float(waiting_time / processes_num)
 
     return (history,t,turnaround_time,waiting_time)
-
-
-
-
-
-
-

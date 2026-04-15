@@ -7,6 +7,7 @@ from preemptive_priority import preemptive_priority_scheduler
 import threading
 from queue import Queue
 from SJF_NF import sjf
+import keyboard
 
 ## ========================================================================== ##
 ## ============================ Helper Functions ============================ ##
@@ -87,15 +88,17 @@ SCHEDULER_FUNCTIONS = {
 
 def pause_event_handler(selected_algo: str, processes_list: list[Process], new_process_queue, pause_event, stop_event):
     current_id=len(processes_list)
-    while not stop_event.is_set():
+    while True:
         
         input()
+        if (stop_event.is_set()):
+            break
 
         if pause_event.is_set():
             pause_event.clear()
-            print("\n Simulation is paused")
-            print(" [A] : add a new process")
-            print(" [R] : Resume the simulation")
+            print("\nSimulation is paused")
+            print("[A] : add a new process")
+            print("[R] : Resume the simulation")
             while True:
                 choice = input(" Choice : ").strip().upper()
                 if(choice == "A"):
@@ -136,6 +139,7 @@ def main():
         pause_event       = threading.Event()
         stop_event        = threading.Event()
         pause_event.set()
+        stop_event.clear()
 
         selected_algo       = get_the_scheduler_type()
         get_processes(selected_algo, processes_list)
@@ -173,11 +177,13 @@ def main():
             fig         = fig,
             ax          = ax
         )
-
-        stop_event.set()
-
         print(f"\nAverage Turnaround Time : {att:.2f} sec")
         print(f"Average Waiting Time    : {awt:.2f} sec\n")
+
+        stop_event.set()
+        print("Simulation finished, press any key to continue.")
+        listener.join() 
+
         print(f"Close the chart window to continue.")
 
         plt.ioff()

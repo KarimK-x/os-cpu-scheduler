@@ -37,7 +37,7 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
         # Checking for pause
         if(live_sim):
             if pause_event:
-                pause_event.wait()  
+                pause_event.wait() 
 
             if new_process_queue:
                 while not new_process_queue.empty():
@@ -81,7 +81,6 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
             queue_str = "  →  ".join(f"P{p.num}({p.burst_time})" for p in ready_queue[1:])
             print(f"  ⏳ Waiting  : {queue_str if queue_str else 'empty'}")
 
-            # NOW we sleep. If paused here, the menu prints cleanly underneath the text above.
             time.sleep(1)
             
             redraw_gantt(ax, history)

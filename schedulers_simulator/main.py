@@ -26,6 +26,13 @@ def get_valid_number(prompt):
         except ValueError:
             print("Error: That is not a valid number. Please try again.")
 
+def get_positive_number(prompt):
+    while True:
+        value = get_valid_number(prompt)
+        if(value > 0):
+            return value
+        print("Please enter a positive number")
+
 def get_processes(selected_algo: str, processes_list: list[Process]):
     number_of_processes = 0
     while (not number_of_processes > 0):
@@ -36,7 +43,7 @@ def get_processes(selected_algo: str, processes_list: list[Process]):
     i = 1
     while i <= number_of_processes:
         arrival_time = get_valid_number((f"Enter the arrival time of P{i}: "))
-        burst_time = get_valid_number((f"Enter the burst time of P{i}: "))
+        burst_time =   get_positive_number((f"Enter the burst time of P{i}: "))
         priority = None
 
         if "Priority" in selected_algo:
@@ -107,7 +114,7 @@ def pause_event_handler(selected_algo: str, processes_list: list[Process], new_p
 
                     print("please note the arrival time will be considered from this second")
                     arrival_time = get_valid_number((f"Enter the arrival time: "))
-                    burst_time = get_valid_number((f"Enter the burst time: "))
+                    burst_time   = get_positive_number((f"Enter the burst time: "))
                     priority = None
 
                     if "Priority" in selected_algo:

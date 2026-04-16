@@ -5,7 +5,7 @@ import time
 
 
 
-def sjf(processes: list[Process], live_sim: bool = False, fig = None, ax = None)->tuple[list, int, float, float]:
+def sjf(processes: list[Process], new_process_queue = None, live_sim: bool = False, pause_event = None, fig = None, ax = None)->tuple[list, int, float, float]:
 
     readyqueue = []
     history = []
@@ -18,6 +18,7 @@ def sjf(processes: list[Process], live_sim: bool = False, fig = None, ax = None)
     processes = sorted(processes, key=lambda x: (x.arrival_time, x.num))
 
     while readyqueue or processes_curr:
+
         for p in processes:
             if p.arrival_time <= t and p.isFinished==False:
                 readyqueue.append(p)
@@ -53,6 +54,13 @@ def sjf(processes: list[Process], live_sim: bool = False, fig = None, ax = None)
                 fig.canvas.flush_events()
                 j+=1
                 history[-1][2]+=1
+                if pause_event:
+                    pause_event.wait()
+                while not new_process_queue.empty():
+                    p = new_process_queue.get()
+                    p.arrival_time += t
+                    processes.append(p)
+                    processes_curr+=1
 
         print(f"\n  ✔  P{readyqueue[0].num} finished at t={t+burst}")
         print(f"{'─' * 40}")

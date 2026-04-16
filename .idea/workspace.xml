@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b1196d-ea3c-4b0c-9c12-1b5a10ee764f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$" beforeDir="false" afterPath="$PROJECT_DIR$" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schedulers_simulator/SJF_NF.py" beforeDir="false" afterPath="$PROJECT_DIR$/schedulers_simulator/SJF_NF.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schedulers_simulator/gantt.png" beforeDir="false" afterPath="$PROJECT_DIR$/schedulers_simulator/gantt.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schedulers_simulator/preemptive_priority.py" beforeDir="false" afterPath="$PROJECT_DIR$/schedulers_simulator/preemptive_priority.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,12 +23,12 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="3CMlXeazMu859oTDOIHkYEeFlZD" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -37,7 +40,7 @@
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "SJF-non-preemptive",
+    "git-widget-placeholder": "dynamic-adding",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>

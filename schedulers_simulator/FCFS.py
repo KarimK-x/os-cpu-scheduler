@@ -1,84 +1,81 @@
-import Process
+from Process import Process
 from gantt_chart import redraw_gantt
 import time
 
 class FCFS:
-    def __init__(self):
-        pass
-
-    def run(self, processes : list[Process], live_sim : bool = False, fig = None, ax = None):
-        self.processes = sorted(processes, key=lambda p: p.arrival_time)
-        self.gantt_chart = []
+    def run(self, processes_queue : list[Process],
+            new_process_queue = None,
+            pause_event = None,
+            live_sim : bool = False,
+            fig = None, ax = None):
+        processes = sorted(processes_queue, key=lambda p:(p.arrival_time, p.num))
+        gantt_chart = []
         current_time = 0
+        current_p = None
 
-        if live_sim:
-            for p in self.processes:
-                if current_time < p.arrival_time:
-                    idle_start = current_time
-                    self.gantt_chart.append([0, idle_start, idle_start + 1])
-                    while current_time < p.arrival_time:
-                        time.sleep(1)
-                        current_time += 1
-                        self.gantt_chart[-1][2] = current_time
-                        redraw_gantt(ax, self.gantt_chart)
-                        fig.canvas.draw()
-                        fig.canvas.flush_events()
+        while not all(p.isFinished for p in processes) or (new_process_queue and not new_process_queue.empty()):
+            if live_sim:
+                if pause_event:
+                    pause_event.wait()
+                if new_process_queue:
+                    while not new_process_queue.empty():
+                        new_p = new_process_queue.get()
+                        new_p.arrival_time += current_time
+                        processes.append(new_p)
+                        processes.sort(key=lambda p: (p.arrival_time, p.num))
 
-                p.start_time = current_time
-                self.gantt_chart.append([p.num, p.start_time, p.start_time+1])
+                if current_p is None:
+                    current_p = next((p for p in processes if not p.isFinished and current_time >= p.arrival_time),
+                                     None)
+                    if current_p and current_p.start_time is None:
+                        current_p.start_time = current_time
+
+                if current_p:
+                    if gantt_chart and gantt_chart[-1][0] == current_p.num:
+                        gantt_chart[-1][2] = current_time + 1
+                    else:
+                        gantt_chart.append([current_p.num, current_time, current_time + 1])
+
+                    current_p.burst_time -= 1
+
+                    if current_p.burst_time == 0:
+                        current_p.finish_time = current_time + 1
+                        current_p.isFinished = True
+                        current_p.turn_around_time = current_p.finish_time - current_p.arrival_time
+                        current_p.waiting_time = current_p.turn_around_time - current_p.original_burst_time
+                        current_p = None
+                else:
+                    if gantt_chart and gantt_chart[-1][0] == 0:
+                        gantt_chart[-1][2] = current_time + 1
+                    else:
+                        gantt_chart.append([0, current_time, current_time + 1])
+
                 time.sleep(1)
-                redraw_gantt(ax, self.gantt_chart)
+                current_time += 1
+                redraw_gantt(ax, gantt_chart)
                 fig.canvas.draw()
                 fig.canvas.flush_events()
-                for _ in range(1,p.burst_time):
-                    time.sleep(1)
-                    current_time += 1
-                    self.gantt_chart[-1][2] += 1
-                    redraw_gantt(ax,self.gantt_chart)
-                    fig.canvas.draw()
-                    fig.canvas.flush_events()
-                current_time += 1
-                p.finish_time = current_time
-                p.turnaround_time = p.finish_time - p.arrival_time
-                p.waiting_time = p.turnaround_time - p.burst_time
+            else:
+                for p in processes:
+                    if current_time < p.arrival_time:
+                        gantt_chart.append([0, current_time, p.arrival_time])
+                        current_time = p.arrival_time
+                    p.start_time = current_time
+                    current_time = current_time + p.burst_time
+                    p.finish_time = current_time
+                    p.isFinished = True
+                    p.turn_around_time = p.finish_time - p.arrival_time
+                    p.waiting_time = p.turn_around_time - p.burst_time
+                    gantt_chart.append([p.num, p.start_time, p.finish_time])
 
-        else:
-            for p in self.processes:
-                if current_time < p.arrival_time:
-                    self.gantt_chart.append([0, current_time, p.arrival_time])
-                    current_time = p.arrival_time
-                p.start_time = current_time
-                current_time = current_time + p.burst_time
-                p.finish_time = current_time
-                p.isFinished = True
-                p.turnaround_time = p.finish_time - p.arrival_time
-                p.waiting_time = p.turnaround_time - p.burst_time
-                self.gantt_chart.append([p.num, p.start_time, p.finish_time])
+        avg_tat, avg_wt = self.calculateAverageTime(processes)
+        return gantt_chart, current_time, avg_tat, avg_wt
 
-        avg_tat, avg_wt = self.calculateAverageTime()
-        return self.gantt_chart, current_time, avg_tat, avg_wt
 
-    def calculateAverageTime(self):
-        total_tat = sum(p.turnaround_time for p in self.processes)
-        total_wt = sum(p.waiting_time for p in self.processes)
-        num_processes = len(self.processes)
+    def calculateAverageTime(self, processes : list):
+        total_tat = sum(p.turn_around_time for p in processes)
+        total_wt = sum(p.waiting_time for p in processes)
+        num_processes = len(processes)
         avg_tat = total_tat / num_processes
         avg_wt = total_wt / num_processes
         return avg_tat, avg_wt
-
-
-if __name__ == "__main__":
-
-    test_processes = [
-        Process.Process(num=1, arrival_time=0, burst_time=7),
-        Process.Process(num=2, arrival_time=9, burst_time=5),
-        Process.Process(num=3, arrival_time=10, burst_time=3)
-    ]
-
-    scheduler = FCFS()
-    gantt, current_time, avg_tat, avg_wt = scheduler.run(test_processes)
-
-    print(f"\nGantt Chart: {gantt}")
-    print(f"Average TAT: {avg_tat:.2f}")
-    print(f"Average WT: {avg_wt:.2f}")
-

@@ -5,6 +5,9 @@ set "ROOT=%~dp0"
 if "%ROOT:~-1%"=="\" set "ROOT=%ROOT:~0,-1%"
 pushd "%ROOT%" >nul
 
+set "PAUSE_ON_EXIT=1"
+if /I "%~1"=="--no-pause" set "PAUSE_ON_EXIT=0"
+
 set "PYTHON_EXE=C:\Users\Dell\pyver\py310\python.exe"
 if exist "%PYTHON_EXE%" goto :python_ok
 
@@ -12,6 +15,11 @@ set "PYTHON_EXE=python"
 where %PYTHON_EXE% >nul 2>nul
 if errorlevel 1 (
     echo [ERROR] Python was not found. Install Python or edit PYTHON_EXE in this script.
+    if "%PAUSE_ON_EXIT%"=="1" (
+        echo.
+        echo Press any key to close this window...
+        pause >nul
+    )
     popd >nul
     exit /b 1
 )
@@ -42,11 +50,23 @@ echo [SUCCESS] Build completed.
 echo [INFO] Generated files:
 dir /b "dist"
 
+if "%PAUSE_ON_EXIT%"=="1" (
+    echo.
+    echo Build finished. Press any key to close this window...
+    pause >nul
+)
+
 popd >nul
 exit /b 0
 
 :fail
+set "BUILD_EXIT=%ERRORLEVEL%"
 echo.
-echo [ERROR] Build failed with exit code %ERRORLEVEL%.
+echo [ERROR] Build failed with exit code %BUILD_EXIT%.
+if "%PAUSE_ON_EXIT%"=="1" (
+    echo.
+    echo Build failed. Press any key to close this window...
+    pause >nul
+)
 popd >nul
-exit /b 1
+exit /b %BUILD_EXIT%

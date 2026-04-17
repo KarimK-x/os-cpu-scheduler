@@ -4,6 +4,7 @@ from gantt_chart import draw_gantt
 from SJF import sjf_preemptive
 from round_robin import RoundRobinScheduler
 from preemptive_priority import preemptive_priority_scheduler
+from Non_preemptive_priority import Non_preemptive_priority
 import threading
 from queue import Queue
 from SJF_NF import sjf
@@ -88,7 +89,7 @@ SCHEDULER_FUNCTIONS = {
     "SJF (Non-Preemptive)":      sjf,
     "SJF (Preemptive)":          sjf_preemptive,
     "Round Robin":               RoundRobinScheduler().runRoundRobin,
-    "Priority (Non-Preemptive)": None,
+    "Priority (Non-Preemptive)": Non_preemptive_priority,
     "Priority (Preemptive)":     preemptive_priority_scheduler,
 }
 

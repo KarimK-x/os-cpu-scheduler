@@ -5,7 +5,7 @@ import time
 
 
 
-def sjf(processes: list[Process], new_process_queue = None, live_sim: bool = False, pause_event = None, fig = None, ax = None)->tuple[list, int, float, float]:
+def sjf(processes: list[Process], new_process_queue = None, live_sim: bool = False, pause_event = None, fig = None, ax = None, on_progress = None)->tuple[list, int, float, float]:
 
     readyqueue = []
     history = []
@@ -41,6 +41,8 @@ def sjf(processes: list[Process], new_process_queue = None, live_sim: bool = Fal
         readyqueue[0].start_time = t
         readyqueue[0].finish_time = t + burst
         history.append([readyqueue[0].num, readyqueue[0].start_time, readyqueue[0].start_time+1])
+        if live_sim and on_progress is not None:
+            on_progress(history, history[-1][2])
 
         print(f"\n  ✔  P{readyqueue[0].num} started at t={t}")
         print(f"{'─' * 40}")
@@ -49,9 +51,10 @@ def sjf(processes: list[Process], new_process_queue = None, live_sim: bool = Fal
             j = 1
             while j<burst:
                 time.sleep(1)
-                redraw_gantt(ax, history)
-                fig.canvas.draw()
-                fig.canvas.flush_events()
+                if fig is not None and ax is not None:
+                    redraw_gantt(ax, history)
+                    fig.canvas.draw()
+                    fig.canvas.flush_events()
                 j+=1
                 history[-1][2]+=1
                 if pause_event:
@@ -61,6 +64,8 @@ def sjf(processes: list[Process], new_process_queue = None, live_sim: bool = Fal
                     p.arrival_time += t
                     processes.append(p)
                     processes_curr+=1
+                if on_progress is not None:
+                    on_progress(history, history[-1][2])
 
         print(f"\n  ✔  P{readyqueue[0].num} finished at t={t+burst}")
         print(f"{'─' * 40}")

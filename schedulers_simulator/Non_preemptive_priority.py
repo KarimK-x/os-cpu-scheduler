@@ -5,7 +5,7 @@ import time
 import copy 
 
 # Algorithm operation
-def Non_preemptive_priority(processes: list[Process], new_process_queue = None,live_sim: bool = False,pause_event = None, fig = None, ax = None):
+def Non_preemptive_priority(processes: list[Process], new_process_queue = None,live_sim: bool = False,pause_event = None, fig = None, ax = None, on_progress = None):
     
     # Add processes into job queue
     job_queue       = copy.deepcopy(processes)
@@ -48,6 +48,8 @@ def Non_preemptive_priority(processes: list[Process], new_process_queue = None,l
             current_time += 1
             if live_sim:
                 time.sleep(1)
+                if on_progress is not None:
+                    on_progress(gantt, current_time)
             continue
         
         # Determine priority of the process if there are 2 processes have the same priority use FCFS algorithm 
@@ -87,9 +89,12 @@ def Non_preemptive_priority(processes: list[Process], new_process_queue = None,l
                 # NOW we sleep. If paused here, the menu prints cleanly underneath the text above.
                 time.sleep(1)
 
-                redraw_gantt(ax, gantt)
-                fig.canvas.draw()                     # type: ignore
-                fig.canvas.flush_events()             # type: ignore
+                if fig is not None and ax is not None:
+                    redraw_gantt(ax, gantt)
+                    fig.canvas.draw()                     # type: ignore
+                    fig.canvas.flush_events()             # type: ignore
+                if on_progress is not None:
+                    on_progress(gantt, current_time)
         
         # Average waiting and turnaround time calculations            
         total_turnaround += current_time - ready_process.original_arrival_time

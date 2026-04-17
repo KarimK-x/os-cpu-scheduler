@@ -7,7 +7,7 @@ import copy
 
 
 
-def preemptive_priority_scheduler(process_list: list[Process], new_process_queue = None,live_sim: bool = False,pause_event = None, fig = None, ax = None)->tuple[list, int, float, float]:
+def preemptive_priority_scheduler(process_list: list[Process], new_process_queue = None,live_sim: bool = False,pause_event = None, fig = None, ax = None, on_progress = None)->tuple[list, int, float, float]:
     process_list = copy.deepcopy(process_list)
 
     #sort by arrival time, priority in case of same arrival time
@@ -67,9 +67,12 @@ def preemptive_priority_scheduler(process_list: list[Process], new_process_queue
                 history.append(("Idle", current_time - 1, current_time))
             if live_sim:
                 time.sleep(1)
-                redraw_gantt(ax, history)
-                fig.canvas.draw()
-                fig.canvas.flush_events()
+                if fig is not None and ax is not None:
+                    redraw_gantt(ax, history)
+                    fig.canvas.draw()
+                    fig.canvas.flush_events()
+                if on_progress is not None:
+                    on_progress(history, current_time)
 
             continue
 
@@ -100,9 +103,12 @@ def preemptive_priority_scheduler(process_list: list[Process], new_process_queue
 
         if live_sim:
             time.sleep(1)
-            redraw_gantt(ax, history)
-            fig.canvas.draw()
-            fig.canvas.flush_events()            
+            if fig is not None and ax is not None:
+                redraw_gantt(ax, history)
+                fig.canvas.draw()
+                fig.canvas.flush_events()            
+            if on_progress is not None:
+                on_progress(history, current_time)
 
 
         if(current_process.burst_time>0):

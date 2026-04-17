@@ -19,6 +19,8 @@ class RoundRobinScheduler:
 
     def _live_redraw(self, ax, history: list[tuple[int, int, int]]) -> None:
         """Redraw and pump GUI events so the window remains responsive."""
+        if ax is None:
+            return
         redraw_gantt(ax, history)
         fig = ax.figure
         fig.canvas.draw_idle()
@@ -26,7 +28,7 @@ class RoundRobinScheduler:
         plt.pause(0.001)
         
     def runRoundRobin(self, current_processes : list[Process], new_process_queue = None,
-                      live_sim: bool = False, pause_event = None , fig = None, ax = None) -> tuple[list, int, float, float]:
+                      live_sim: bool = False, pause_event = None , fig = None, ax = None, on_progress = None) -> tuple[list, int, float, float]:
         """
         Args:
             processes (list[Process]):  A list of Process objects
@@ -42,6 +44,8 @@ class RoundRobinScheduler:
         self.processes = current_processes.copy()
         if live_sim:
             self._live_redraw(ax, self.process_time_ranges)
+            if on_progress is not None:
+                on_progress(self.process_time_ranges, self.current_time)
         unarrived_processes : list[Process] = []
         
         # To Loop Back Again
@@ -86,9 +90,10 @@ class RoundRobinScheduler:
                         if live_sim:
                             if pause_event:
                                 pause_event.wait()
-                            plt.pause(1)
-                        else:
-                            time.sleep(1)
+                            if ax is not None:
+                                plt.pause(1)
+                            else:
+                                time.sleep(1)
                         process.burst_time -= 1
                         print(f"Executing process {process.num} for {t+1} seconds. Remaining burst time: {process.burst_time}")
                         
@@ -97,6 +102,8 @@ class RoundRobinScheduler:
                             if self.current_time > process.start_time:
                                 active_history.append((process.num, process.start_time, self.current_time))
                             self._live_redraw(ax, active_history)
+                            if on_progress is not None:
+                                on_progress(active_history, self.current_time)
 
                         # Process ends before quantum is done
                         if process.burst_time <= 0: 
@@ -110,6 +117,8 @@ class RoundRobinScheduler:
                             process_removed_flag = True
                             if live_sim:
                                 self._live_redraw(ax, self.process_time_ranges)
+                                if on_progress is not None:
+                                    on_progress(self.process_time_ranges, self.current_time)
                             break
                         
                     # Do not increment i if a process is removed. As processes shifts down.    
@@ -119,14 +128,21 @@ class RoundRobinScheduler:
                         self.process_time_ranges.append((process.num, process.start_time, process.finish_time))
                         if live_sim:
                             self._live_redraw(ax, self.process_time_ranges)
+                            if on_progress is not None:
+                                on_progress(self.process_time_ranges, self.current_time)
             else:
                 if live_sim:
-                    plt.pause(1)
-                else:
-                    time.sleep(1)
+                    if ax is not None:
+                        plt.pause(1)
+                    else:
+                        time.sleep(1)
                 self.current_time += 1    
+                if live_sim and on_progress is not None:
+                    on_progress(self.process_time_ranges, self.current_time)
         if live_sim:    
             self._live_redraw(ax, self.process_time_ranges)
+            if on_progress is not None:
+                on_progress(self.process_time_ranges, self.current_time)
         
         return (self.process_time_ranges,
                 self.current_time,

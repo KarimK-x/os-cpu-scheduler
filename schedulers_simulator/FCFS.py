@@ -7,7 +7,8 @@ class FCFS:
             new_process_queue = None,
             pause_event = None,
             live_sim : bool = False,
-            fig = None, ax = None):
+            fig = None, ax = None,
+            on_progress = None):
         processes = sorted(processes_queue, key=lambda p:(p.arrival_time, p.num))
         gantt_chart = []
         current_time = 0
@@ -52,9 +53,12 @@ class FCFS:
 
                 time.sleep(1)
                 current_time += 1
-                redraw_gantt(ax, gantt_chart)
-                fig.canvas.draw()
-                fig.canvas.flush_events()
+                if fig is not None and ax is not None:
+                    redraw_gantt(ax, gantt_chart)
+                    fig.canvas.draw()
+                    fig.canvas.flush_events()
+                if on_progress is not None:
+                    on_progress(gantt_chart, current_time)
             else:
                 for p in processes:
                     if current_time < p.arrival_time:

@@ -5,10 +5,7 @@ set "ROOT=%~dp0"
 if "%ROOT:~-1%"=="\" set "ROOT=%ROOT:~0,-1%"
 pushd "%ROOT%" >nul
 
-set "PAUSE_ON_EXIT=1"
-if /I "%~1"=="--no-pause" set "PAUSE_ON_EXIT=0"
-
-set "PYTHON_EXE=C:\Users\Dell\pyver\py310\python.exe"
+set "PYTHON_EXE=C:\Users\ZBook\AppData\Local\Python\pythoncore-3.14-64\python.exe"
 if exist "%PYTHON_EXE%" goto :python_ok
 
 set "PYTHON_EXE=python"

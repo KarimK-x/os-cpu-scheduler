@@ -1,0 +1,1551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>987</width>
+    <height>735</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* =====================================================
+   MAIN WINDOW - PREMIUM MONOCHROME GRADIENT
+   ===================================================== */
+QMainWindow#MainWindow {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 #0B0F20,
+        stop:0.4 #121A33,
+        stop:0.7 #0C1125,
+        stop:1 #0B0F20
+    );
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    color: #E0E7FF;
+}
+
+/* =====================================================
+   CENTRAL WIDGETS
+   ===================================================== */
+QWidget#centralWidget_2,
+QWidget#centralWidget {
+    background: rgba(255,255,255,0.04);
+    border-radius: 24px;
+    border: 1px solid rgba(79,139,255,0.3);
+}
+
+/* =====================================================
+   CARD FRAME
+   ===================================================== */
+QFrame#cardFrame {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 rgba(18,18,55,0.9),
+        stop:1 rgba(38,38,95,0.9)
+    );
+    border-radius: 28px;
+    border: 1px solid rgba(79,139,255,0.6);
+}
+
+/* =====================================================
+   FUNCTION BUTTONS (TOP ROW) - VERY THIN/FLAT
+   ===================================================== */
+QPushButton#Compression,
+QPushButton#Decompresssion,
+QPushButton#Prettifying,
+QPushButton#XMLconsistency,
+QPushButton#Minifying,
+QPushButton#XMLtoJSON {
+    background: rgba(255,255,255,0.05);
+    height: 35px;
+    min-width: 100px;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    border-radius: 20px;
+    border: 2px solid rgba(139,92,246,0.5);
+    box-shadow: 0 8px 35px rgba(139,92,246,0.6), 0 0 50px rgba(99,102,241,0.4);
+}
+
+QPushButton#Compression:hover,
+QPushButton#Decompresssion:hover,
+QPushButton#Prettifying:hover,
+QPushButton#XMLconsistency:hover,
+QPushButton#Minifying:hover,
+QPushButton#XMLtoJSON:hover {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 #c084fc,
+        stop:0.2 #a78bfa,
+        stop:0.5 #818cf8,
+        stop:0.8 #60a5fa,
+        stop:1 #3b82f6
+    );
+    box-shadow: 0 20px 70px rgba(139,92,246,1), 0 0 100px rgba(99,102,241,0.8);
+    border: 2px solid rgba(168,85,247,0.8);
+}
+
+QPushButton#Compression:pressed,
+QPushButton#Decompresssion:pressed,
+QPushButton#Prettifying:pressed,
+QPushButton#XMLconsistency:pressed,
+QPushButton#Minifying:pressed,
+QPushButton#XMLtoJSON:pressed {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 #a855f7,
+        stop:0.2 #8b5cf6,
+        stop:0.5 #6366f1,
+        stop:0.8 #3b82f6,
+        stop:1 #2563eb
+    );
+    box-shadow: 0 8px 35px rgba(139,92,246,0.7), 0 0 50px rgba(99,102,241,0.5);
+}
+
+/* =====================================================
+   TEXT EDITOR - READ ONLY STYLE
+   ===================================================== */
+QTextEdit#textEdit {
+    padding: 18px;
+    font-size: 14px;
+    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;, monospace;
+    color: #E0E7FF;
+    background: rgba(255,255,255,0.06);
+    border-radius: 18px;
+    border: 1px solid rgba(79,139,255,0.45);
+    box-shadow: inset 0 0 8px rgba(79,139,255,0.2);
+}
+
+QTextEdit#textEdit:hover {
+    border: 1px solid #4F8BFF;
+    box-shadow: 0 0 16px #4F8BFF, inset 0 0 8px rgba(79,139,255,0.25);
+}
+
+QTextEdit#textEdit:focus {
+    border: 2px solid #2563EB;
+    box-shadow: 0 0 25px #2563EB, inset 0 0 12px rgba(79,139,255,0.3);
+}
+/* =====================================================
+   SIDE BUTTONS (save, new, new_2, graph) - 110px WIDTH
+   ===================================================== */
+QPushButton#graph,
+QPushButton#save,
+QPushButton#new,
+QPushButton#new_2 {
+    height: 40px;
+    width: 110px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #E0E7FF;
+    border-radius: 20px;
+    border: none;
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 #c084fc,
+        stop:0.2 #a78bfa,
+        stop:0.5 #818cf8,
+        stop:0.8 #60a5fa,
+        stop:1 #3b82f6
+    );
+    box-shadow: 0 8px 35px rgba(139,92,246,0.8), 0 0 50px rgba(99,102,241,0.5);
+}
+
+QPushButton#graph:hover,
+QPushButton#save:hover,
+QPushButton#new:hover,
+QPushButton#new_2:hover {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 #a855f7,
+        stop:0.2 #8b5cf6,
+        stop:0.5 #6366f1,
+        stop:0.8 #3b82f6,
+        stop:1 #2563eb
+    );
+    box-shadow: 0 20px 70px rgba(139,92,246,1), 0 0 100px rgba(99,102,241,0.8);
+    border: 2px solid rgba(168,85,247,0.8);
+}
+
+QPushButton#graph:pressed,
+QPushButton#save:pressed,
+QPushButton#new:pressed,
+QPushButton#new_2:pressed {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 #8b5cf6,
+        stop:0.5 #6366f1,
+        stop:1 #3b82f6
+    );
+    box-shadow: 0 8px 35px rgba(139,92,246,0.7), 0 0 50px rgba(99,102,241,0.5);
+}
+/* =====================================================
+   SCROLL BARS (FOR TEXT EDITOR)
+   ===================================================== */
+QScrollBar:vertical {
+    background: rgba(255,255,255,0.03);
+    width: 12px;
+    border-radius: 6px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: rgba(79,139,255,0.4);
+    border-radius: 6px;
+    min-height: 30px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: rgba(79,139,255,0.6);
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar:horizontal {
+    background: rgba(255,255,255,0.03);
+    height: 12px;
+    border-radius: 6px;
+    margin: 0px;
+}
+
+QScrollBar::handle:horizontal {
+    background: rgba(79,139,255,0.4);
+    border-radius: 6px;
+    min-width: 30px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: rgba(79,139,255,0.6);
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+}
+
+/* =====================================================
+   MENU BAR - PREMIUM STYLE WITH ROUNDED CORNERS
+   ===================================================== */
+QMenuBar {
+    background: rgba(18,18,55,0.8);
+    color: #E0E7FF;
+    border-bottom: 1px solid rgba(79,139,255,0.3);
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+QMenuBar::item {
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: 12px;
+    margin: 2px;
+}
+
+QMenuBar::item:selected {
+    background: rgba(79,139,255,0.2);
+    border: 1px solid rgba(79,139,255,0.4);
+    border-radius: 12px;
+}
+
+QMenuBar::item:pressed {
+    background: rgba(79,139,255,0.3);
+    border-radius: 12px;
+}
+
+/* =====================================================
+   MENU DROPDOWN - PREMIUM STYLE WITH ROUNDED CORNERS
+   ===================================================== */
+QMenu {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 rgba(18,18,55,0.95),
+        stop:1 rgba(28,28,75,0.95)
+    );
+    color: #E0E7FF;
+    border: 1px solid rgba(79,139,255,0.5);
+    border-radius: 16px;
+    padding: 8px;
+}
+
+QMenu::item {
+    padding: 10px 30px 10px 20px;
+    border-radius: 10px;
+    margin: 2px;
+}
+
+QMenu::item:selected {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(139,92,246,0.3),
+        stop:1 rgba(99,102,241,0.3)
+    );
+    border: 1px solid rgba(139,92,246,0.5);
+    border-radius: 10px;
+}
+
+QMenu::separator {
+    height: 1px;
+    background: rgba(79,139,255,0.3);
+    margin: 5px 10px;
+    border-radius: 1px;
+}</string>
+  </property>
+  <widget class="QWidget_" name="centralWidget_2">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <widget class="QWidget" name="centralWidget" native="true">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QVBoxLayout" name="rootLayout">
+         <item>
+          <widget class="QFrame" name="cardFrame">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <widget class="QWidget" name="horizontalLayoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>110</y>
+              <width>586</width>
+              <height>62</height>
+             </rect>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="minimumSize">
+                <size>
+                 <width>52</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>44</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">/* For a single Label */
+QLabel {
+    color: white;
+	background: rgba(255,255,255,0.05);
+   /* background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(99, 179, 237, 0.15),
+        stop:1 rgba(159, 122, 234, 0.15));*/
+    
+	border: 2px solid rgba(139,92,246,0.5);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.5px;
+	height: 28px;
+	min-width:20px;
+}
+/*    color: white;
+	background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(79,139,255,0.45);
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.4px;
+    min-height: 30px;</string>
+               </property>
+               <property name="text">
+                <string>CPU Algorithm</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="dropdown_menu">
+               <property name="styleSheet">
+                <string notr="true">QComboBox {
+    color: white;
+	background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(139,92,246,0.5);
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.4px;
+    min-height: 30px;
+}
+
+/*QComboBox:hover {
+    border-color: rgba(99, 179, 237, 1.0);
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+    //    stop:0 rgba(59, 130, 246, 0.35),
+  //      stop:1 rgba(99, 102, 241, 0.35));
+//}*/
+
+QComboBox:focus {
+    border: 2px solid rgba(79,139,255,0.45);
+    background: rgba(255,255,255,0.05);/*qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(59, 130, 246, 0.3),
+        stop:1 rgba(99, 102, 241, 0.3));*/
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+   border: 1px solid rgba(79,139,255,0.45);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+
+QComboBox::down-arrow {
+    image: none;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid rgba(99, 179, 237, 0.9);
+    width: 0px;
+    height: 0px;
+}
+
+QComboBox QAbstractItemView {
+    color: white;
+    background-color: #0f1b2d;
+    border: 2px solid rgba(168,85,247,0.8);
+    border-radius: 10px;
+    padding: 6px;
+    outline: none;
+    selection-background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(59, 130, 246, 0.5),
+        stop:1 rgba(99, 102, 241, 0.5));
+    selection-color: white;
+}
+
+QComboBox QAbstractItemView::item {
+    min-height: 60px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 14px;
+    border-radius: 6px;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background: rgba(99, 179, 237, 0.2);
+    color: #63b3ed;
+}
+
+QComboBox QAbstractItemView::item:selected {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(59, 130, 246, 0.5),
+        stop:1 rgba(99, 102, 241, 0.5));
+    color: white;
+}</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>First Come First Serve</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Shortest Job First(SJF) Preemptive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Shortest Job First(SJF) Non Preemptive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Priority Scheduling Preemptive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Priority Scheduling Non Preemptive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Round Robin</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QLabel" name="label">
+            <property name="geometry">
+             <rect>
+              <x>320</x>
+              <y>30</y>
+              <width>361</width>
+              <height>61</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h1 align=&quot;center&quot; style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:xx-large; font-weight:600; color:#ffffff;&quot;&gt;CPU Scheduler&lt;/span&gt;&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+           <widget class="QCheckBox" name="checkBox">
+            <property name="geometry">
+             <rect>
+              <x>30</x>
+              <y>170</y>
+              <width>191</width>
+              <height>51</height>
+             </rect>
+            </property>
+            <property name="palette">
+             <palette>
+              <active>
+               <colorrole role="WindowText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Text">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="ButtonText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="PlaceholderText">
+                <brush brushstyle="NoBrush">
+                 <color alpha="128">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+              </active>
+              <inactive>
+               <colorrole role="WindowText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Text">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="ButtonText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="PlaceholderText">
+                <brush brushstyle="NoBrush">
+                 <color alpha="128">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+              </inactive>
+              <disabled>
+               <colorrole role="WindowText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Text">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="ButtonText">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="PlaceholderText">
+                <brush brushstyle="NoBrush">
+                 <color alpha="128">
+                  <red>255</red>
+                  <green>255</green>
+                  <blue>255</blue>
+                 </color>
+                </brush>
+               </colorrole>
+              </disabled>
+             </palette>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="acceptDrops">
+             <bool>false</bool>
+            </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">    color: white;</string>
+            </property>
+            <property name="text">
+             <string>live simulation</string>
+            </property>
+           </widget>
+           <widget class="QTableWidget" name="tableWidget">
+            <property name="geometry">
+             <rect>
+              <x>450</x>
+              <y>340</y>
+              <width>301</width>
+              <height>271</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QTableWidget {
+    padding: 4px;
+    font-size: 13px;
+    color: #E0E7FF;
+    background: rgba(255,255,255,0.06);
+    border-radius: 18px;
+    border: 2px solid rgba(79,139,255,0.45);
+}
+
+QHeaderView::section {
+    background: rgba(255,255,255,0.06);
+    color: white;
+    border: 2px solid rgba(139,92,246,0.5);
+    padding: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    height: 24px;
+}
+
+QTableWidget::item {
+    padding: 2px 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(139,92,246,0.5);
+    color: #E0E7FF;
+}
+
+QTableWidget::item:selected {
+    background-color: rgba(79,139,255,0.25);
+    color: white;
+}
+
+QTableCornerButton::section {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(139,92,246,0.5);
+}
+
+QScrollBar:vertical {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(139,92,246,0.5);
+    width: 6px;
+    border-radius: 3px;
+}
+
+QScrollBar::handle:vertical {
+    background: rgba(139,92,246,0.5);
+    border-radius: 3px;
+}
+
+QHeaderView {
+    background: transparent;
+}</string>
+            </property>
+            <column>
+             <property name="text">
+              <string>pid</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Burst</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>finish</string>
+             </property>
+            </column>
+           </widget>
+           <widget class="QTextEdit" name="textEdit">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>340</y>
+              <width>421</width>
+              <height>271</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QTextEdit {
+    padding: 18px;
+    font-size: 15px;
+    color: #E0E7FF;
+    background: rgba(255,255,255,0.06);
+    border-radius: 18px;
+    border: 2px solid rgba(79,139,255,0.45);
+}
+
+QTextEditt:hover {
+    border: 2px solid #4F8BFF;
+}
+
+QTextEdit:focus {
+    border: 2px solid #2563EB;
+}</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="acceptRichText">
+             <bool>false</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Processing results will be displayed here</string>
+            </property>
+           </widget>
+           <widget class="QWidget" name="">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>220</y>
+              <width>901</width>
+              <height>51</height>
+             </rect>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <item>
+              <widget class="QLabel" name="arrival_label">
+               <property name="maximumSize">
+                <size>
+                 <width>170</width>
+                 <height>44</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">/* For a single Label */
+QLabel {
+    color: white;
+   background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(139,92,246,0.5);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.5px;
+height: 28px;
+}</string>
+               </property>
+               <property name="text">
+                <string>Arrival time</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="arrival_input">
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QSpinBox {
+    color: white;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(168,85,247,0.8);
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.4px;
+    min-height: 30px;
+}
+
+QSpinBox:focus {
+    border: 1px solid rgba(168,85,247,0.8);
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::up-button {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid rgba(99, 179, 237, 0.3);
+    border-top-right-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: padding;
+    subcontrol-position: bottom right;
+    width: 20px;
+    border-left: 1px solid rgba(99, 179, 237, 0.3);
+    border-bottom-right-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::up-arrow {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 5px solid rgba(99, 179, 237, 0.9);
+    width: 0px;
+    height: 0px;
+}
+
+QSpinBox::down-arrow {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid rgba(99, 179, 237, 0.9);
+    width: 0px;
+    height: 0px;
+}</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QLabel" name="burst_label">
+                 <property name="maximumSize">
+                  <size>
+                   <width>180</width>
+                   <height>44</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* For a single Label */
+QLabel {
+    color: white;
+    background: rgba(255,255,255,0.05);
+   border: 2px solid rgba(139,92,246,0.5);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.5px;
+	height: 28px;
+	min-width:20px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Burst time</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="burst_input">
+                 <property name="maximumSize">
+                  <size>
+                   <width>60</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QSpinBox {
+    color: white;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(168,85,247,0.8);
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.4px;
+    min-height: 30px;
+}
+
+QSpinBox:focus {
+    border: 1px solid rgba(168,85,247,0.8);
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::up-button {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid rgba(99, 179, 237, 0.3);
+    border-top-right-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: padding;
+    subcontrol-position: bottom right;
+    width: 20px;
+    border-left: 1px solid rgba(99, 179, 237, 0.3);
+    border-bottom-right-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::up-arrow {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 5px solid rgba(99, 179, 237, 0.9);
+    width: 0px;
+    height: 0px;
+}
+
+QSpinBox::down-arrow {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid rgba(99, 179, 237, 0.9);
+    width: 0px;
+    height: 0px;
+}</string>
+                 </property>
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::PlusMinus</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="priority_label">
+                 <property name="maximumSize">
+                  <size>
+                   <width>180</width>
+                   <height>44</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* For a single Label */
+QLabel {
+    color: white;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(139,92,246,0.5);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.5px;
+	height: 28px;
+	min-width:20px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>priority</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="priority_input">
+                 <property name="maximumSize">
+                  <size>
+                   <width>60</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QSpinBox {
+    color: white;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(168,85,247,0.8);
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.4px;
+    min-height: 30px;
+}
+
+QSpinBox:focus {
+    border: 1px solid rgba(168,85,247,0.8);
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::up-button {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid rgba(99, 179, 237, 0.3);
+    border-top-right-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: padding;
+    subcontrol-position: bottom right;
+    width: 20px;
+    border-left: 1px solid rgba(99, 179, 237, 0.3);
+    border-bottom-right-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::up-arrow {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 5px solid rgba(99, 179, 237, 0.9);
+    width: 0px;
+    height: 0px;
+}
+
+QSpinBox::down-arrow {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid rgba(99, 179, 237, 0.9);
+    width: 0px;
+    height: 0px;
+}</string>
+                 </property>
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::PlusMinus</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="quantum_label">
+                 <property name="maximumSize">
+                  <size>
+                   <width>180</width>
+                   <height>44</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* For a single Label */
+QLabel {
+    color: white;
+    background: rgba(255,255,255,0.05);
+   border: 2px solid rgba(139,92,246,0.5);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.5px;
+	height: 28px;
+	min-width:20px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>quantum time</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="quantum_input">
+                 <property name="maximumSize">
+                  <size>
+                   <width>60</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QSpinBox {
+    color: white;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(168,85,247,0.8);
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    letter-spacing: 0.4px;
+    min-height: 30px;
+}
+
+QSpinBox:focus {
+    border: 1px solid rgba(168,85,247,0.8);
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::up-button {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid rgba(99, 179, 237, 0.3);
+    border-top-right-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: padding;
+    subcontrol-position: bottom right;
+    width: 20px;
+    border-left: 1px solid rgba(99, 179, 237, 0.3);
+    border-bottom-right-radius: 10px;
+    background: rgba(255,255,255,0.05);
+}
+
+QSpinBox::up-arrow {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 5px solid rgba(99, 179, 237, 0.9);
+    width: 0px;
+    height: 0px;
+}
+
+QSpinBox::down-arrow {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid rgba(99, 179, 237, 0.9);
+    width: 0px;
+    height: 0px;
+}</string>
+                 </property>
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::PlusMinus</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="verticalLayoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>760</x>
+              <y>350</y>
+              <width>160</width>
+              <height>255</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QPushButton" name="runButton">
+               <property name="styleSheet">
+                <string notr="true">/* Add your button objectNames below */
+QPushButton#runButton,
+QPushButton#resetButton,
+QPushButton#saveButton {
+background: rgba(255,255,255,0.05);
+height: 25px;
+min-width: 50px;
+padding: 8px 20px;
+font-size: 13px;
+font-weight: 600;
+color: #ffffff;
+border-radius: 20px;
+border: 2px solid rgba(139,92,246,0.5);
+box-shadow: 0 8px 35px rgba(139,92,246,0.6), 0 0 50px rgba(99,102,241,0.4);
+transition: all 0.35s ease;
+}
+
+QPushButton#runButton:hover,
+QPushButton#resetButton:hover,
+QPushButton#saveButton:hover {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #c084fc,
+    stop:0.2 #a78bfa,
+    stop:0.5 #818cf8,
+    stop:0.8 #60a5fa,
+    stop:1 #3b82f6
+);
+box-shadow: 0 20px 70px rgba(139,92,246,1), 0 0 100px rgba(99,102,241,0.8);
+border: 2px solid rgba(168,85,247,0.8);
+}
+
+QPushButton#runButton:pressed,
+QPushButton#resetButton:pressed,
+QPushButton#saveButton:pressed {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #a855f7,
+    stop:0.2 #8b5cf6,
+    stop:0.5 #6366f1,
+    stop:0.8 #3b82f6,
+    stop:1 #2563eb
+);
+box-shadow: 0 8px 35px rgba(139,92,246,0.7), 0 0 50px rgba(99,102,241,0.5);
+}</string>
+               </property>
+               <property name="text">
+                <string>run</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pauseButton">
+               <property name="acceptDrops">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">/* Add your button objectNames below */
+QPushButton#runButton,
+QPushButton#resetButton,
+QPushButton#saveButton ,
+QPushButton#pauseButton,
+QPushButton#resumeButton{
+background: rgba(255,255,255,0.05);
+height: 25px;
+min-width: 50px;
+padding: 8px 20px;
+font-size: 13px;
+font-weight: 600;
+color: #ffffff;
+border-radius: 20px;
+border: 2px solid rgba(139,92,246,0.5);
+box-shadow: 0 8px 35px rgba(139,92,246,0.6), 0 0 50px rgba(99,102,241,0.4);
+transition: all 0.35s ease;
+}
+
+QPushButton#runButton:hover,
+QPushButton#resetButton:hover,
+QPushButton#saveButton:hover,
+QPushButton#pauseButton:hover,
+QPushButton#resumeButton: hover {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #c084fc,
+    stop:0.2 #a78bfa,
+    stop:0.5 #818cf8,
+    stop:0.8 #60a5fa,
+    stop:1 #3b82f6
+);
+box-shadow: 0 20px 70px rgba(139,92,246,1), 0 0 100px rgba(99,102,241,0.8);
+border: 2px solid rgba(168,85,247,0.8);
+}
+
+QPushButton#runButton:pressed,
+QPushButton#resetButton:pressed,
+QPushButton#saveButton:pressed,
+QPushButton#pauseButton:pressed,
+QPushButton#resumeButton:preesed {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #a855f7,
+    stop:0.2 #8b5cf6,
+    stop:0.5 #6366f1,
+    stop:0.8 #3b82f6,
+    stop:1 #2563eb
+);
+box-shadow: 0 8px 35px rgba(139,92,246,0.7), 0 0 50px rgba(99,102,241,0.5);
+}</string>
+               </property>
+               <property name="text">
+                <string>pause</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="resumeButton">
+               <property name="acceptDrops">
+                <bool>false</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">/* Add your button objectNames below */
+QPushButton#runButton,
+QPushButton#resetButton,
+QPushButton#saveButton ,
+QPushButton#pauseButton,
+QPushButton#resumeButton{
+background: rgba(255,255,255,0.05);
+height: 25px;
+min-width: 50px;
+padding: 8px 20px;
+font-size: 13px;
+font-weight: 600;
+color: #ffffff;
+border-radius: 20px;
+border: 2px solid rgba(139,92,246,0.5);
+box-shadow: 0 8px 35px rgba(139,92,246,0.6), 0 0 50px rgba(99,102,241,0.4);
+transition: all 0.35s ease;
+}
+
+QPushButton#runButton:hover,
+QPushButton#resetButton:hover,
+QPushButton#saveButton:hover,
+QPushButton#pauseButton:hover,
+QPushButton#resumeButton: hover {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #c084fc,
+    stop:0.2 #a78bfa,
+    stop:0.5 #818cf8,
+    stop:0.8 #60a5fa,
+    stop:1 #3b82f6
+);
+box-shadow: 0 20px 70px rgba(139,92,246,1), 0 0 100px rgba(99,102,241,0.8);
+border: 2px solid rgba(168,85,247,0.8);
+}
+
+QPushButton#runButton:pressed,
+QPushButton#resetButton:pressed,
+QPushButton#saveButton:pressed,
+QPushButton#pauseButton:pressed,
+QPushButton#resumeButton:preesed {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #a855f7,
+    stop:0.2 #8b5cf6,
+    stop:0.5 #6366f1,
+    stop:0.8 #3b82f6,
+    stop:1 #2563eb
+);
+box-shadow: 0 8px 35px rgba(139,92,246,0.7), 0 0 50px rgba(99,102,241,0.5);
+}</string>
+               </property>
+               <property name="text">
+                <string>resume</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="resetButton">
+               <property name="styleSheet">
+                <string notr="true">/* Add your button objectNames below */
+QPushButton#runButton,
+QPushButton#resetButton,
+QPushButton#saveButton {
+background: rgba(255,255,255,0.05);
+height: 25px;
+min-width: 50px;
+padding: 8px 20px;
+font-size: 13px;
+font-weight: 600;
+color: #ffffff;
+border-radius: 20px;
+border: 2px solid rgba(139,92,246,0.5);
+box-shadow: 0 8px 35px rgba(139,92,246,0.6), 0 0 50px rgba(99,102,241,0.4);
+transition: all 0.35s ease;
+}
+
+QPushButton#runButton:hover,
+QPushButton#resetButton:hover,
+QPushButton#saveButton:hover {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #c084fc,
+    stop:0.2 #a78bfa,
+    stop:0.5 #818cf8,
+    stop:0.8 #60a5fa,
+    stop:1 #3b82f6
+);
+box-shadow: 0 20px 70px rgba(139,92,246,1), 0 0 100px rgba(99,102,241,0.8);
+border: 2px solid rgba(168,85,247,0.8);
+}
+
+QPushButton#runButton:pressed,
+QPushButton#resetButton:pressed,
+QPushButton#saveButton:pressed {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #a855f7,
+    stop:0.2 #8b5cf6,
+    stop:0.5 #6366f1,
+    stop:0.8 #3b82f6,
+    stop:1 #2563eb
+);
+box-shadow: 0 8px 35px rgba(139,92,246,0.7), 0 0 50px rgba(99,102,241,0.5);
+}</string>
+               </property>
+               <property name="text">
+                <string>reset</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="saveButton">
+               <property name="styleSheet">
+                <string notr="true">/* Add your button objectNames below */
+QPushButton#runButton,
+QPushButton#resetButton,
+QPushButton#saveButton {
+background: rgba(255,255,255,0.05);
+height: 25px;
+min-width: 50px;
+padding: 8px 20px;
+font-size: 13px;
+font-weight: 600;
+color: #ffffff;
+border-radius: 20px;
+border: 2px solid rgba(139,92,246,0.5);
+box-shadow: 0 8px 35px rgba(139,92,246,0.6), 0 0 50px rgba(99,102,241,0.4);
+transition: all 0.35s ease;
+}
+
+QPushButton#runButton:hover,
+QPushButton#resetButton:hover,
+QPushButton#saveButton:hover {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #c084fc,
+    stop:0.2 #a78bfa,
+    stop:0.5 #818cf8,
+    stop:0.8 #60a5fa,
+    stop:1 #3b82f6
+);
+box-shadow: 0 20px 70px rgba(139,92,246,1), 0 0 100px rgba(99,102,241,0.8);
+border: 2px solid rgba(168,85,247,0.8);
+}
+
+QPushButton#runButton:pressed,
+QPushButton#resetButton:pressed,
+QPushButton#saveButton:pressed {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #a855f7,
+    stop:0.2 #8b5cf6,
+    stop:0.5 #6366f1,
+    stop:0.8 #3b82f6,
+    stop:1 #2563eb
+);
+box-shadow: 0 8px 35px rgba(139,92,246,0.7), 0 0 50px rgba(99,102,241,0.5);
+}</string>
+               </property>
+               <property name="text">
+                <string>display</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QPushButton" name="addButton">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>280</y>
+              <width>171</width>
+              <height>45</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Add your button objectNames below */
+QPushButton#addButton{
+background: rgba(255,255,255,0.05);
+height: 25px;
+min-width: 50px;
+padding: 8px 20px;
+font-size: 13px;
+font-weight: 600;
+color: #ffffff;
+border-radius: 20px;
+border: 2px solid rgba(139,92,246,0.5);
+box-shadow: 0 8px 35px rgba(139,92,246,0.6), 0 0 50px rgba(99,102,241,0.4);
+transition: all 0.35s ease;
+}
+
+QPushButton#addButton:hover {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #c084fc,
+    stop:0.2 #a78bfa,
+    stop:0.5 #818cf8,
+    stop:0.8 #60a5fa,
+    stop:1 #3b82f6
+);
+box-shadow: 0 20px 70px rgba(139,92,246,1), 0 0 100px rgba(99,102,241,0.8);
+border: 2px solid rgba(168,85,247,0.8);
+}
+
+QPushButton#addButton:pressed {
+background: qlineargradient(
+    x1:0, y1:0, x2:1, y2:1,
+    stop:0 #a855f7,
+    stop:0.2 #8b5cf6,
+    stop:0.5 #6366f1,
+    stop:0.8 #3b82f6,
+    stop:1 #2563eb
+);
+box-shadow: 0 8px 35px rgba(139,92,246,0.7), 0 0 50px rgba(99,102,241,0.5);
+}</string>
+            </property>
+            <property name="text">
+             <string>add</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>987</width>
+     <height>50</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWidget_</class>
+   <extends>QWidget</extends>
+   <header>qwidget_.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

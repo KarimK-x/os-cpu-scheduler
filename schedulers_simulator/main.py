@@ -8,7 +8,7 @@ import threading
 from queue import Queue
 from SJF_NF import sjf
 import keyboard
-
+from FCFS import FCFS
 ## ========================================================================== ##
 ## ============================ Helper Functions ============================ ##
 ## ========================================================================== ##
@@ -84,7 +84,7 @@ def get_the_scheduler_type():
         print("Invalid choice. Enter a number from 1 to 6.")
 
 SCHEDULER_FUNCTIONS = {
-    "FCFS":                      None,
+    "FCFS":                      FCFS().run,
     "SJF (Non-Preemptive)":      sjf,
     "SJF (Preemptive)":          sjf_preemptive,
     "Round Robin":               RoundRobinScheduler().runRoundRobin,

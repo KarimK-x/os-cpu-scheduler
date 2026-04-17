@@ -25,8 +25,8 @@ class RoundRobinScheduler:
         fig.canvas.flush_events()
         plt.pause(0.001)
         
-    def runRoundRobin(self, current_processes : list[Process],
-                      live_sim: bool = False, fig = None, ax = None) -> tuple[list, int, float, float]:
+    def runRoundRobin(self, current_processes : list[Process], new_process_queue = None,
+                      live_sim: bool = False, pause_event = None , fig = None, ax = None) -> tuple[list, int, float, float]:
         """
         Args:
             processes (list[Process]):  A list of Process objects
@@ -42,23 +42,35 @@ class RoundRobinScheduler:
         self.processes = current_processes.copy()
         if live_sim:
             self._live_redraw(ax, self.process_time_ranges)
-            # self.drawGant(self.process_time_ranges, live=True)
         unarrived_processes : list[Process] = []
         
         # To Loop Back Again
         while(current_processes or unarrived_processes):
+            if live_sim:
+                if pause_event:
+                    pause_event.wait()
+                
+            if new_process_queue:
+                while not new_process_queue.empty():
+                    new_p = new_process_queue.get()
+                    # new_p.original_arrival_time = new_p.arrival_time + self.current_time 
+                    current_processes.append(new_p)
+                    self.processes.append(new_p)
+                    print(f"\n [+] P{new_p.num} joined the simulation!")
+
             
             for process in current_processes.copy():
                 if process.arrival_time > self.current_time:
                     if current_processes:
                         current_processes.remove(process)
-                    unarrived_processes.insert(0, process)
+                    unarrived_processes.append(process)
+                    unarrived_processes.sort(key=lambda p: (p.arrival_time, p.num))
                     
             for process in unarrived_processes.copy():
                 if process.arrival_time <= self.current_time:
                     if unarrived_processes:
                         unarrived_processes.remove(process)
-                    current_processes.insert(0, process)
+                    current_processes.append(process)
                         
             print(f"============\nROUND ROBIN: Current Processes: {[process.num for process in current_processes]}")
             if current_processes:
@@ -72,10 +84,12 @@ class RoundRobinScheduler:
                     for t in range(self.quantum):
                         self.current_time += 1
                         if live_sim:
+                            if pause_event:
+                                pause_event.wait()
                             plt.pause(1)
                         else:
                             time.sleep(1)
-                        process.burst_time = process.burst_time - 1
+                        process.burst_time -= 1
                         print(f"Executing process {process.num} for {t+1} seconds. Remaining burst time: {process.burst_time}")
                         
                         if live_sim:
@@ -83,11 +97,6 @@ class RoundRobinScheduler:
                             if self.current_time > process.start_time:
                                 active_history.append((process.num, process.start_time, self.current_time))
                             self._live_redraw(ax, active_history)
-                            # self.drawGant(
-                            #     self.process_time_ranges,
-                            #     live=True,
-                            #     active_segment=(process.num, process.start_time, self.current_time),
-                            # )
 
                         # Process ends before quantum is done
                         if process.burst_time <= 0: 
@@ -101,7 +110,6 @@ class RoundRobinScheduler:
                             process_removed_flag = True
                             if live_sim:
                                 self._live_redraw(ax, self.process_time_ranges)
-                                # self.drawGant(self.process_time_ranges, live=True)
                             break
                         
                     # Do not increment i if a process is removed. As processes shifts down.    
@@ -111,7 +119,6 @@ class RoundRobinScheduler:
                         self.process_time_ranges.append((process.num, process.start_time, process.finish_time))
                         if live_sim:
                             self._live_redraw(ax, self.process_time_ranges)
-                            # self.drawGant(self.process_time_ranges, live=True)
             else:
                 if live_sim:
                     plt.pause(1)
@@ -120,12 +127,11 @@ class RoundRobinScheduler:
                 self.current_time += 1    
         if live_sim:    
             self._live_redraw(ax, self.process_time_ranges)
-            # self.drawGant(self.process_time_ranges, live=True, finalize=True)
         
         return (self.process_time_ranges,
                 self.current_time,
-                self.calculateAverageWaitingTime(self.process_time_ranges),
-                self.calculateAverageTurnAroundTime(self.process_time_ranges))
+                self.calculateAverageTurnAroundTime(self.process_time_ranges),
+                self.calculateAverageWaitingTime(self.process_time_ranges))
     
 
     def calculateAverageWaitingTime(self, process_time_ranges: list[tuple[int, int, int]]) -> float:

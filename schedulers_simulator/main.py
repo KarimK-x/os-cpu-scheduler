@@ -21,11 +21,18 @@ def get_valid_number(prompt):
         try:
             value = int(input(prompt))
             if value < 0:
-                print("Error: Please enter a positive number.")
+                print("Error: Please enter a non negative number.")
                 continue
             return value
         except ValueError:
             print("Error: That is not a valid number. Please try again.")
+
+def get_positive_number(prompt):
+    while True:
+        value = get_valid_number(prompt)
+        if(value > 0):
+            return value
+        print("Error: Please enter a positive number.")
 
 def get_processes(selected_algo: str, processes_list: list[Process]):
     number_of_processes = 0
@@ -37,7 +44,7 @@ def get_processes(selected_algo: str, processes_list: list[Process]):
     i = 1
     while i <= number_of_processes:
         arrival_time = get_valid_number((f"Enter the arrival time of P{i}: "))
-        burst_time = get_valid_number((f"Enter the burst time of P{i}: "))
+        burst_time =   get_positive_number((f"Enter the burst time of P{i}: "))
         priority = None
 
         if "Priority" in selected_algo:
@@ -75,7 +82,7 @@ def get_the_scheduler_type():
             exit()
         elif choice in SCHEDULERS:
             return SCHEDULERS[choice]
-        print("  Invalid choice. Enter a number from 1 to 6.")
+        print("Invalid choice. Enter a number from 1 to 6.")
 
 SCHEDULER_FUNCTIONS = {
     "FCFS":                      None,
@@ -98,17 +105,17 @@ def pause_event_handler(selected_algo: str, processes_list: list[Process], new_p
         if pause_event.is_set():
             pause_event.clear()
             print("\nSimulation is paused")
-            print("[A] : add a new process")
-            print("[R] : Resume the simulation")
             while True:
-                choice = input(" Choice : ").strip().upper()
+                print("[A] : add a new process")
+                print("[R] : Resume the simulation")
+                choice = input("Choice : ").strip().upper()
                 if(choice == "A"):
                     current_id+=1
                     num=current_id
 
-                    print("please note the arrival time will be considered from this second")
+                    print("Please note the arrival time will be considered from this second")
                     arrival_time = get_valid_number((f"Enter the arrival time: "))
-                    burst_time = get_valid_number((f"Enter the burst time: "))
+                    burst_time   = get_positive_number((f"Enter the burst time: "))
                     priority = None
 
                     if "Priority" in selected_algo:
@@ -116,17 +123,17 @@ def pause_event_handler(selected_algo: str, processes_list: list[Process], new_p
                     
                     new_p = Process(num, arrival_time, burst_time, priority)
                     new_process_queue.put(new_p)
-                    print(f" p{new_p.num} is added successfully.")
+                    print(f"p{new_p.num} is added successfully.")
                 elif(choice == "R"):
                     pause_event.set()         
-                    print(" Resumed...\n")
+                    print("Resumed...\n")
                     break
 
                 else: 
                     print("invalid option please try again [A] or [R]")
         else:
             pause_event.set()
-            print("\n Resumed")
+            print("\nResumed")
 
 ## ===================================================================== ##
 ## ================================ Main =============================== ##
@@ -163,7 +170,7 @@ def main():
             daemon = True
         )
         listener.start()
-        print("\n  Press Enter at any time to pause / resume.\n")
+        print("\nPress Enter at any time to pause / resume.\n")
 
         plt.ion()
         fig, ax = plt.subplots(figsize=(12, 3))

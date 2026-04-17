@@ -19,7 +19,7 @@ def proceed_time(processes: list[Process]):
     for process in processes:
         process.arrival_time -= 1
 
-def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim: bool = False, pause_event = None, fig = None, ax = None)->tuple[list, int, float, float]:
+def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim: bool = False, pause_event = None, fig = None, ax = None, on_progress = None)->tuple[list, int, float, float]:
     time_counter = 0
     ready_queue = []
     history = []
@@ -56,6 +56,8 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
             proceed_time(processes)
             if live_sim:
                 time.sleep(1) 
+                if on_progress is not None:
+                    on_progress(history, time_counter)
             continue
 
         # Running a process for 1 sec
@@ -82,10 +84,13 @@ def sjf_preemptive(processes: list[Process], new_process_queue = None, live_sim:
             print(f"  ⏳ Waiting  : {queue_str if queue_str else 'empty'}")
 
             time.sleep(1)
-            
-            redraw_gantt(ax, history)
-            fig.canvas.draw()                     # type: ignore
-            fig.canvas.flush_events()             # type: ignore
+
+            if fig is not None and ax is not None:
+                redraw_gantt(ax, history)
+                fig.canvas.draw()                     # type: ignore
+                fig.canvas.flush_events()             # type: ignore
+            if on_progress is not None:
+                on_progress(history, time_counter)
 
         # Process termination
         if running_process.burst_time == 0:

@@ -2,6 +2,7 @@
 setlocal
 
 set "ROOT=%~dp0"
+if "%ROOT:~-1%"=="\" set "ROOT=%ROOT:~0,-1%"
 pushd "%ROOT%" >nul
 
 set "PYTHON_EXE=C:\Users\Dell\pyver\py310\python.exe"
@@ -29,11 +30,11 @@ if exist "gui.spec" del /f /q "gui.spec"
 if exist "cli.spec" del /f /q "cli.spec"
 
 echo [3/4] Building GUI executable...
-"%PYTHON_EXE%" -m PyInstaller --noconfirm --clean --onefile --windowed --name os-scheduler-gui --paths "%ROOT%" --paths "%ROOT%schedulers_simulator" --hidden-import Process --hidden-import gantt_chart "%ROOT%gui\scheduler_gui.py"
+"%PYTHON_EXE%" -m PyInstaller --noconfirm --clean --onefile --windowed --name os-scheduler-gui --paths "%ROOT%" --paths "%ROOT%\schedulers_simulator" --hidden-import Process --hidden-import gantt_chart "%ROOT%\gui\scheduler_gui.py"
 if errorlevel 1 goto :fail
 
 echo [4/4] Building CLI executable...
-"%PYTHON_EXE%" -m PyInstaller --noconfirm --clean --onefile --console --name cli --paths "%ROOT%" --paths "%ROOT%schedulers_simulator" --hidden-import Process --hidden-import gantt_chart --hidden-import keyboard "%ROOT%schedulers_simulator\main.py"
+"%PYTHON_EXE%" -m PyInstaller --noconfirm --clean --onefile --console --name os-scheduler-cli --paths "%ROOT%" --paths "%ROOT%\schedulers_simulator" --hidden-import Process --hidden-import gantt_chart --hidden-import keyboard "%ROOT%\schedulers_simulator\main.py"
 if errorlevel 1 goto :fail
 
 echo.
